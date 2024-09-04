@@ -1,4 +1,6 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
+import { useNavigate } from 'react-router-dom';
+import Context from '../components/context'
 import axios from 'axios'
 
 export default function SignIn() {
@@ -7,6 +9,8 @@ export default function SignIn() {
     const [password, setPassword] = useState('')
     const [accessCode, setAccessCode] = useState('')
     const [returnMessage, setReturnMessage] = useState('')
+    const [userInfo, setUserInfo] = useContext(Context)
+    const navigate = useNavigate();
 
     const handleSignUp = async (e) => {
         e.preventDefault()
@@ -21,8 +25,25 @@ export default function SignIn() {
         .catch(e => setReturnMessage(<p className="failure">{e.message}</p>))
     }
 
-    const handleLoginIn = (e) => {
+    const handleLoginIn = async (e) => {
         e.preventDefault()
+
+        const handleLoginResponse = (res) => {
+            if (res.status === 201) {
+                return <p className="success">{res.data}</p>
+            }
+            setUserInfo(res.data.user)
+            navigate(`/${res.data.route}`)
+        }
+
+        const params = {params: {
+            username: username,
+            password: password
+        }}
+
+        await axios.get("http://localhost:4000/login", params)
+        .then(res => setReturnMessage(handleLoginResponse(res)))
+        .catch(e => setReturnMessage(<p className="failure">{e.message}</p>))
     }
 
     return(
