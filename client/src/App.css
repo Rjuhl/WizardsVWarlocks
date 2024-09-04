@@ -37,6 +37,8 @@
   }
 }
 
+/* Sign in/Login page CSS */
+
 .centerDiv {
   display: flex;
   flex-direction:column;
@@ -109,3 +111,86 @@
   color: #2c5777;
 }
 
+/* Character Creation page CSS */
+
+html, body {
+  height: 100%; /* Ensure the body and html take up the full height */
+  margin: 0; /* Remove default margin */
+}
+
+.charCreationPage {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding: 2%;
+}
+
+.charCreationPage h1 {
+  padding: 0;
+  margin: 0;
+  font-size: xxx-large;
+}
+
+.charCreationPage h2 {
+  padding: 0;
+  margin: 0;
+}
+
+.charCreationUserDiv {
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+}
+
+.charCreationUserTopDiv {
+  margin-bottom: auto; /* Pushes this div to the top */
+}
+
+.charCreationUserBottomDiv {
+  margin-top: auto; /* Pushes this div to the bottom */
+}
+
+.charCreationRowDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.charCreationAddButton {
+  margin-left: 10px;
+  height: 20px;
+  width: 30px;
+}
+
+.charCreationPage button {
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.colorWheelDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.characterDisplay {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.characterDisplay2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-content: flex-end;
+}
+
+.charCreationPage canvas {
+  display: flex;
+  flex-grow: 0.5;
+}
+
+/* Home Page page CSS */
