@@ -17,8 +17,8 @@ export default function CharacterCustomization() {
     }, [hatHsva, staffHsva])
 
     const updateContext = () => {
-        userInfo['hatColor'] = hsvaToHex(hatHsva).match(/\w\w/g).map(x => parseInt(x, 16))
-        userInfo['staffColor'] = hsvaToHex(staffHsva).match(/\w\w/g).map(x => parseInt(x, 16))
+        userInfo['hatColor'] = [hatHsva['h'], hatHsva['s'], hatHsva['v']]
+        userInfo['staffColor'] = [staffHsva['h'], staffHsva['s'], staffHsva['v']]
         setUserInfo(userInfo)
     }
 

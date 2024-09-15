@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
 import SignIn from "../pages/signin"
 import Home from "../pages/home"
 import CharCreation from "../pages/character_creation"
+import Shop from '../pages/shop'
+import AdminPage from '../pages/admin_page'
 
 export default function Router() {
     // Can use layout to add components to every page (ie footer/header). The rest is put into outlet
@@ -21,6 +23,8 @@ export default function Router() {
                     <Route path="/" element={<SignIn />} />
                     <Route path="/home" element={<Home />} />
                     <Route path="/charcreation" element={<CharCreation />} />
+                    <Route path="/shop" element={<Shop />} />
+                    <Route path="/adminpage" element={<AdminPage />} />
                 </Route>
                 </Routes>
             </BrowserRouter>

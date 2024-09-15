@@ -9,8 +9,8 @@ require('dotenv/config')
 // const saveSchemaExample = await schemaExample.save()
 
 
-router.get('/signup', async (req, res) => {
-    const { username, password, accessCode } = req.query;
+router.post('/signup', async (req, res) => {
+    const { username, password, accessCode, adminCode } = req.body;
     if (process.env.ACCESS_CODE != accessCode){
         res.send("Access code is incorrect")
         res.end()
@@ -24,8 +24,11 @@ router.get('/signup', async (req, res) => {
         return
     }
 
+    let admin = false
+    if (process.env.ADMIN_CODE === adminCode) {admin = true}
+
     const newPassword = crypto.createHash('sha1').update(password).digest('hex');
-    const newUserData = {username: username, password: newPassword}
+    const newUserData = {username: username, password: newPassword, admin: admin}
     const newUser = new schemas.Users(newUserData)
     const saveUser = await newUser.save()
 
@@ -61,8 +64,8 @@ router.get('/login', async (req, res) => {
     res.end()
 })
 
-router.get('/submitprofile', async (req, res) => {
-    const user = req.query.userInfo
+router.post('/submitprofile', async (req, res) => {
+    const user = req.body.userInfo
     const totalPoints = 4
     const [healthIncrement, manaIncrement, classMultiplierIncrement] = [20, 1, 0.1]
     const [baseHealth, baseMana, baseClassMultiplier] = [100, 8, 1.0]
@@ -102,6 +105,47 @@ router.get('/submitprofile', async (req, res) => {
     const result = await schemas.Users.replaceOne(filter, user);
     res.send("success")
     res.end()
+})
+
+router.post('/addspell', async (req, res) => {
+    const spell = req.body
+    let success = true
+    if (spell.code != process.env.ADMIN_CODE) {
+        console.log("no admin access")
+        res.send("Must be admin to add spell")
+        res.end()
+        return
+    }
+
+    if (spell.id === -1) {
+        const numSpells = await schemas.Spells.countDocuments()
+        spell.id = numSpells
+        const spellSchema = new schemas.Spells(spell)
+        success = await spellSchema.save()
+    } else {
+        const filter = {id: spell.id}
+        success = await schemas.Spells.replaceOne(filter, spell);
+    }
+
+    if (success) {
+        res.send("Success")
+    } else {
+        res.send("Failed to create spell. Please try again.")
+    }
+
+    res.end()
+}) 
+
+router.get('/spell', async (req, res) => {
+    const id = req.query.id
+    const spell =  await schemas.Spells.where({id: id}).findOne()
+    res.send({ spell: spell })
+    res.end()
+})
+
+axios.post('/buySpell', async (req, res) => {
+    const {userId, password, spellId} = req.body
+    
 })
 
 module.exports = router

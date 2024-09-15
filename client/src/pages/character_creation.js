@@ -2,6 +2,7 @@ import CharacterStats from "../components/charcterComponents/characterStats"
 import CharacterCustomization from "../components/charcterComponents/characterCustomization"
 import Context from "../components/context"
 import axios from 'axios'
+import classtypetostring from "../utils/converter"
 import { useContext, useState, useEffect } from "react"
 import { useNavigate } from 'react-router-dom';
 
@@ -10,7 +11,6 @@ export default function CharCreation() {
     const [userInfo, setUserInfo] = useContext(Context)
     const [userClass, setUserClass] = useState(0)
     const [returnMessage, setReturnMessage] = useState('')
-    const classTypes = ["Fire", "Water", "Electric"]
 
     useEffect(() => {
         updateUserContext()
@@ -31,11 +31,11 @@ export default function CharCreation() {
     const submitProfile = async (e) => {
         e.preventDefault()
 
-        const params = {params:{
+        const params = {
             userInfo: userInfo
-        }}
+        }
 
-        await axios.get("http://localhost:4000/submitprofile", params)
+        await axios.post("http://localhost:4000/submitprofile", params)
         .then(res => setReturnMessage(handSubmitProfileResponse(res)))
         .catch(e => setReturnMessage(<p className="failure">{e.message}</p>))
     }
@@ -46,7 +46,7 @@ export default function CharCreation() {
             <div className="charCreationUserDiv">
                 <div className="charCreationUserTopDiv">
                     <h1>{userInfo.username}</h1>
-                    <h2>Type: {classTypes[userClass]}</h2>
+                    <h2>Type: {classtypetostring(userClass)}</h2>
                     <div className="charCreationRowDiv">
                         <button onClick={() => setUserClass(0)}>Fire</button>
                         <button onClick={() => setUserClass(1)}>Water</button>
