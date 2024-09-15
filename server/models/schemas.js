@@ -3,6 +3,7 @@ const Schema = mongoose.Schema
 
 const userSchema = new Schema({
     id: {type:String},
+    admin:{type:Boolean, default:false},
     username: {type:String},
     password: {type:String},
     hatColor: {type:Array, maxItems:3},
@@ -18,11 +19,21 @@ const userSchema = new Schema({
 })
 
 const spellSchema = new Schema({
-    id: {type:String}
+    id: {type:String},
+    name: {type:String},
+    type: {type:Number},
+    class: {type:Number},
+    manaCost: {type:Number},
+    goldCost: {type:Number},
+    abilityBase: {type:Number},
+    abilityDie: {type:Number},
+    abilityNumDie: {type:Number},
+    flags: {type:Array, minItems:20, maxItems:20},
+    description: {type:String}
 })
 
 const Users = mongoose.model('Users', userSchema, 'users')
-const Spells =mongoose.model('Spells', spellSchema, 'spells')
+const Spells = mongoose.model('Spells', spellSchema, 'spells')
 const mySchemas = {'Users': Users, 'Spells': Spells}
 
 module.exports = mySchemas

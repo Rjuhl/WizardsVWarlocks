@@ -37,6 +37,13 @@
   }
 }
 
+/* All Pages CSS */
+body {
+  background-color: #FAF9F6;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
 /* Sign in/Login page CSS */
 
 .centerDiv {
@@ -116,6 +123,7 @@
 html, body {
   height: 100%; /* Ensure the body and html take up the full height */
   margin: 0; /* Remove default margin */
+  overflow: hidden; /* Prevent scrolling */
 }
 
 .charCreationPage {
@@ -194,3 +202,309 @@ html, body {
 }
 
 /* Home Page page CSS */
+
+.homePageLeft {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: flex-start; /* Align items to the left */
+  justify-content: space-between; /* Space between top and bottom elements */
+  max-width: 400px; /* Maximum width to prevent it from getting too wide */
+  width: auto; /* Automatically adjust width based on content */
+  height: 100vh; /* Automatically adjust height based on content */
+  padding: 10px; /* Add some padding */
+  background-color: #ffffff; /* White background for the left panel */
+  border-right: 1px solid #ddd; /* Optional border to separate */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+  margin: 10px; /* Add some margin around the container */
+}
+
+.homePageLeft h1 {
+  font-size: 30px;
+  margin: 10px 0; /* Space out headings */
+  color: #333; /* Darker text color */
+}
+
+.homePageLeft h2 {
+  font-size: 16px;
+  margin: 5px 0; /* Space out subheadings */
+  color: #555; /* Slightly lighter text color */
+}
+
+.challenge-section h2 {
+  font-size: 30px;
+  margin: 5px 0; /* Space out subheadings */
+  color: #555; /* Slightly lighter text color */
+}
+
+.homePageLeft button {
+  background-color: #ADD8E6; /* Green background */
+  color: black; /* White text */
+  border: none; /* Remove default border */
+  padding: 10px 20px; /* Add padding */
+  margin: 10px 0; /* Space out buttons */
+  cursor: pointer; /* Change cursor to pointer */
+  border-radius: 5px; /* Rounded corners */
+  width: 22em;
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.homePageLeft button:hover {
+  background-color: #A0C4E1; /* Darker green on hover */
+}
+
+.homePageUsername {
+  font-size: 50px;
+  margin: 0; /* Space out headings */
+  color: #333; /* Darker text color */
+  font-weight: bold;
+}
+
+.content,
+.challenge-section {
+    width: 90%; /* Ensure both sections take the full width of the parent */
+    border: 1px solid #ccc; /* Light border around the sections */
+    border-radius: 5px; /* Rounded corners for the border */
+    padding: 15px; /* Padding inside each section */
+    background-color: #f9f9f9; /* Slightly different background for contrast */
+    margin-bottom: 5%; /* Space below each section */
+    box-sizing: border-box; /* Include padding in height/width calculations */
+    flex-shrink: 0; /* Prevent sections from shrinking */
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.homePageRow {
+  display: flex; /* Use flexbox for rows */
+  width: 100%; /* Ensure rows take full width */
+  justify-content: flex-start; /* Align items to the left */
+  align-items: center; /* Center items vertically */
+}
+
+.homePageRow h2 {
+  margin: 5px 12px 5px 0;
+  flex: 1; /* Allow headings to grow equally */
+}
+
+/* Spell comp CSS */
+
+.spellComponent {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  width: 220px;
+  margin: 20px auto;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  text-align: start;
+}
+
+ .spellComponent:hover {
+  transform: scale(1.05);
+  background-color: #e0e0e0;
+}
+
+.spellHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.spellHeader h1 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.spellCost {
+  font-size: 14px;
+}
+
+.spellClassInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.spellClassInfo .spellInfoLeft {
+  font-size: 10px;
+}
+
+.spellClassInfo .spellDetailsRight {
+  font-size: 14px;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.spellDescription {
+  margin-top: 12px;
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 5px;
+  font-size: 10px;
+}
+
+/* Admin Page */
+
+.admin-column-container {
+  display: flex;
+  flex-direction: column;
+  height: 700px; 
+  width: 400px;
+  margin: 20px auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  overflow-y: auto; 
+}
+
+.admin-column-item {
+  padding: 5px;
+  margin-bottom: 10px;
+  background-color: #e6e6e6;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.admin-column-item:last-child {
+  margin-bottom: 0;
+}
+
+.admin-column-container button {
+  padding: 10px;
+  margin-top: 10px; /* Space above the button */
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.admin-column-container button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Shop page CSS */
+/* Styles for the spellForSale container */
+.spellForSale {
+  padding: 20px;
+  text-align: center; /* Center the content inside the container */
+}
+
+/* General button styling */
+.spellForSaleButton {
+  background-color: transparent;
+  border: none;
+}
+
+/* First button hover effect */
+.spell-button:hover {
+  background-color: #45a049; /* Slightly darker green on hover */
+}
+
+/* Container to ensure the buttons are centered below the first button */
+.spawned-buttons-container {
+  display: flex;
+  justify-content: center; /* Center the spawned buttons horizontally */
+}
+
+/* Flex container for the two spawned buttons */
+.spawned-buttons {
+  display: flex; /* Flex layout to align the buttons side by side */
+  gap: 15px; /* Space between the two buttons */
+}
+
+/* Buy button styling */
+.buy-button {
+  background-color: #4CAF50; /* Green color for 'Buy' */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 30px; /* Padding for a nicer look */
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.buy-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+/* Cancel (X) button styling */
+.cancel-button {
+  background-color: #f44336; /* Red color for 'X' */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 30px; /* Padding for a balanced look */
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-button:hover {
+  background-color: #d32f2f; /* Darker red on hover */
+}
+
+.spell-row {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+}
+
+/* Container for the entire row */
+.shopRow {
+  display: flex;
+  justify-content: space-between; /* Distribute items across the row */
+  align-items: center; /* Center items vertically */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9; /* Light background */
+  margin: 20px auto;
+  max-width: 80%; /* Set a max width for the container */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Home button on the left */
+.shop-home-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect for the Home button */
+.shop-home-button:hover {
+  background-color: #45a049;
+}
+
+/* Centered Shop title */
+.shop-title {
+  flex: 1; /* Take up available space and center the title */
+  text-align: center; /* Center the Shop title */
+  margin: 0; /* Remove any default margin */
+  font-size: 24px; /* Larger font size for the title */
+  color: #333; /* Darker color for the title */
+}
+
+/* Gold cost on the right */
+.shop-gold-cost {
+  font-size: 18px; /* Slightly smaller than the Shop title */
+  color: #f39c12; /* Gold-like color */
+  margin: 0; /* Remove default margin */
+}
+
+.shop-spells-container {
+  margin: 20px;
+  overflow-x: auto; /* Allow horizontal scrolling */
+  border: 1px solid #ccc; /* Optional: Add a border for visibility */
+  padding: 10px; /* Optional: Add padding for content */
+}
