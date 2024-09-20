@@ -36,14 +36,24 @@ export default function EquipSpells() {
         }
     }
 
-    const removeSpell = (spellId) => {
-        if (userInfo.activeSpells === 0 || !userInfo.includes(spellId)) {
+    const removeSpell = async (spellId) => {
+        if (userInfo.activeSpells === 0 || !userInfo.activeSpells.includes(spellId)) {
             updateReturnMessage("Error, spell cannot be removed", false)
             return
         }
 
-        setSelectedActiveSpell(null)
-        updateReturnMessage("Spell Removed", true)
+        const params = {username:userInfo.username, password:userInfo.password, spellId:spellId}
+        const res = await axios.post('/deactivateSpell', params)
+
+        if (res.status === 200) {
+            setSelectedActiveSpell(null)
+            updateReturnMessage("Spell Removed", true)
+            setUserInfo(res.data)
+        } else {
+            updateReturnMessage(res.data, false)
+        }
+
+        
     }
     const ownedSpells = () => {
         return (

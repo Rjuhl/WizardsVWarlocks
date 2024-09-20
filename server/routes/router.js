@@ -219,4 +219,28 @@ router.post('/setActiveSpell', async (req, res) => {
 
 })
 
+router.post('/deactivateSpell', async (req, res) => {
+    const {username, password, spellId} = req.body
+    let user = await schemas.Users.where({ username:username, password:password }).findOne()
+
+    if (user === null) {
+        res.status(201)
+        res.send("Null user")
+        res.end()
+        return
+    }
+
+    let filteredActiveSpells = user.activeSpells.filter(spell => spell !== spellId)
+    user.activeSpells = filteredActiveSpells
+    const result = await schemas.Users.replaceOne({ username:username }, user);
+
+    if(result) {res.send(user)}
+    else {
+        res.status(201)
+        res.send("Failed to deactivate spell")
+    }
+    res.end()
+
+})
+
 module.exports = router
