@@ -291,7 +291,7 @@ html, body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   padding: 15px;
   width: 220px;
-  margin: 20px auto;
+  margin: 10px auto;
   border-radius: 10px;
   background-color: #f9f9f9;
   text-align: start;
@@ -419,14 +419,23 @@ html, body {
 
 /* Buy button styling */
 .buy-button {
+  display: flex;
+  justify-content: center; /* Center the text horizontally */
+  align-items: center; /* Center the text vertically */
+  
+  flex-grow: 1; /* Allow button to grow based on container */
+  max-width: 90%; /* Ensure the button is slightly smaller than its container */
+  
   background-color: #4CAF50; /* Green color for 'Buy' */
   color: white;
   border: none;
   border-radius: 5px;
-  padding: 10px 30px; /* Padding for a nicer look */
-  font-size: 14px;
+  
+  padding: 10px 20px; /* Adjust padding for better fit */
+  font-size: 14px; /* Font size */
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Add transition for hover effects */
 }
 
 .buy-button:hover {
@@ -435,14 +444,22 @@ html, body {
 
 /* Cancel (X) button styling */
 .cancel-button {
+  display: flex;
+  justify-content: center; /* Center the text horizontally */
+  align-items: center; /* Center the text vertically */
+  
+  flex-grow: 1; /* Allow button to grow based on container */
+  max-width: 90%; /* Ensure the button is slightly smaller than its container */
+
   background-color: #f44336; /* Red color for 'X' */
   color: white;
   border: none;
   border-radius: 5px;
-  padding: 10px 30px; /* Padding for a balanced look */
-  font-size: 14px;
+  padding: 10px 20px; /* Adjust padding for better fit */
+  font-size: 14px; /* Font size */
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Add transition for hover effects */
 }
 
 .cancel-button:hover {
@@ -460,11 +477,11 @@ html, body {
   display: flex;
   justify-content: space-between; /* Distribute items across the row */
   align-items: center; /* Center items vertically */
-  padding: 20px;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #f9f9f9; /* Light background */
-  margin: 20px auto;
+  margin: 5px auto;
   max-width: 80%; /* Set a max width for the container */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
@@ -503,8 +520,60 @@ html, body {
 }
 
 .shop-spells-container {
-  margin: 20px;
-  overflow-x: auto; /* Allow horizontal scrolling */
+  margin: 10px;
+  overflow-x: scroll; /* Allow horizontal scrolling */
   border: 1px solid #ccc; /* Optional: Add a border for visibility */
   padding: 10px; /* Optional: Add padding for content */
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, .5);
+  -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
+.equip-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.add-button{
+  display: flex; /* Flex layout to align the buttons side by side */
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* Space between the two buttons */
+}
+
+.equip-header {
+  padding: 0;
+  margin: 0;
+}
+
+.equip-page-failure-message {
+  color: #e74c3c; /* Red for failure message */
+  font-size: 16px; /* Adjust font size */
+  background-color: #fce4e4; /* Light red background for emphasis (optional) */
+  padding: 10px;
+  border: 1px solid #e74c3c; /* Border to match text color */
+  border-radius: 4px; /* Optional: Slight rounding of the corners */
+  text-align: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  
+}
+
+.equip-page-success-message {
+  color: #2ecc71; /* Green color for success message */
+  font-size: 16px; /* Adjust font size */
+  background-color: #eafaf1; /* Light green background for emphasis (optional) */
+  padding: 10px;
+  border: 1px solid #2ecc71; /* Border to match text color */
+  border-radius: 4px; /* Optional: Slight rounding of the corners */
+  text-align: center;
+  margin-left: 10px;
+  margin-right: 10px;
 }

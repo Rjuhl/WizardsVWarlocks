@@ -4,6 +4,7 @@ import Home from "../pages/home"
 import CharCreation from "../pages/character_creation"
 import Shop from '../pages/shop'
 import AdminPage from '../pages/admin_page'
+import EquipSpells from '../pages/equip_spells'
 
 export default function Router() {
     // Can use layout to add components to every page (ie footer/header). The rest is put into outlet
@@ -25,6 +26,7 @@ export default function Router() {
                     <Route path="/charcreation" element={<CharCreation />} />
                     <Route path="/shop" element={<Shop />} />
                     <Route path="/adminpage" element={<AdminPage />} />
+                    <Route path="/equipspells" element={<EquipSpells />} />
                 </Route>
                 </Routes>
             </BrowserRouter>

@@ -143,9 +143,80 @@ router.get('/spell', async (req, res) => {
     res.end()
 })
 
-axios.post('/buySpell', async (req, res) => {
-    const {userId, password, spellId} = req.body
-    
+router.post('/buySpell', async (req, res) => {
+    const {username, password, spellId} = req.body
+    const spell = await schemas.Spells.where({ id:spellId }).findOne()
+    let user = await schemas.Users.where({ username:username, password:password }).findOne()
+
+    if (user === null || spell === null) {
+        res.status(201)
+        res.send("Null user or spell")
+        res.end()
+        return
+    }
+
+    if (spell.goldCost > user.money) {
+        res.status(201)
+        res.send("User does not have sufficient gold to purchase spell")
+        res.end()
+        return
+    }
+
+    if (user.spellsOwned.includes(spell.id)) {
+        res.status(201)
+        res.send('spell already bought')
+        res.end()
+    }
+
+    user.money -= spell.goldCost
+    user.spellsOwned.push(spell.id)
+    const result = await schemas.Users.replaceOne({ username:username }, user);
+
+    if(result) {res.send(user)}
+    else {
+        res.status(201)
+        res.send("Failed to purchase spell")
+    }
+    res.end()
+})
+
+router.post('/setActiveSpell', async (req, res) => {
+    const numSpellSlots = 6
+    const {username, password, spellId} = req.body
+    const spell = await schemas.Spells.where({ id:spellId }).findOne()
+    let user = await schemas.Users.where({ username:username, password:password }).findOne()
+
+    if (user === null || spell === null) {
+        res.status(201)
+        res.send("Null user or spell")
+        res.end()
+        return
+    }
+
+    if (user.activeSpells.length >= numSpellSlots) {
+        res.status(201)
+        res.send("Active spell limit already reached")
+        res.end()
+        return
+    }
+
+    if (user.activeSpells.includes(spell.id)) {
+        res.status(201)
+        res.send("Spell already active")
+        res.end()
+        return
+    }
+
+    user.activeSpells.push(spell.id)
+    const result = await schemas.Users.replaceOne({ username:username }, user);
+
+    if(result) {res.send(user)}
+    else {
+        res.status(201)
+        res.send("Failed to activate spell")
+    }
+    res.end()
+
 })
 
 module.exports = router
