@@ -6,23 +6,30 @@ import axios from 'axios'
 
 
 export default function Shop() {
-    const numSpells = 7
+    const totalSpells = 7
     const numRows = 2
+    const [userInfo, setUserInfo] = useContext(Context)
+    const [numSpells, setNumSpells] = useState(totalSpells)
     const [selectedSpell, setSelectedSpell] = useState(null)
     const [buttonsVisable, setButtonsVisable] = useState(false)
-    const [userInfo, setUserInfo] = useContext(Context)
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        setNumSpells(totalSpells - userInfo.spellsOwned.length)
+    }, [setUserInfo])
 
     const getSpellPartitions = () => {
         let spellPartition = []
         let currentSpellRow = []
         const spellsInRow = Math.ceil(numSpells / numRows)
-        for (let i = 0; i < numSpells; i++) {
+        for (let i = 0; i < totalSpells; i++) {
             if (currentSpellRow.length === spellsInRow) {
                 spellPartition.push(currentSpellRow)
                 currentSpellRow = []
             }
-            currentSpellRow.push(i)
+            if (!userInfo.spellsOwned.includes(i.toString())) {
+                currentSpellRow.push(i)
+            }
         }
         
         if (spellPartition.length > 0) {spellPartition.push(currentSpellRow)}
@@ -46,8 +53,14 @@ export default function Shop() {
         if (spellCost > userInfo.money) {
             alert("You do not have enough gold to purchase this spell")
         } else {
-            const params = {userId:userInfo.id, password:userInfo.password, spellId:spellId}
-            await axios.post('buySpell', params)
+            const params = {username:userInfo.username, password:userInfo.password, spellId:spellId}
+            const res = await axios.post('/buySpell', params)
+            if (res.status === 200) {
+                setUserInfo(res.data)
+            } else {
+                console.log(res.data)
+            }
+
         }
 
         setSelectedSpell(null)

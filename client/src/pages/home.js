@@ -55,7 +55,7 @@ export default function Home() {
 
             <div className="challenge-section">
                 <button onClick={() => {navigate('/shop')}}>Shop</button>
-                <button>Equip Spells</button>
+                <button onClick={() => {navigate('/equipspells')}}>Equip Spells</button>
                 <h1>Current Challenge:</h1>
                 <h2>{challenge}</h2>
             </div>
