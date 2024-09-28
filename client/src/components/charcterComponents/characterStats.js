@@ -1,4 +1,4 @@
-import Context from "../context"
+import Context from "../providers/context"
 import { useEffect, useContext, useState } from "react"
 
 export default function CharacterStats() {

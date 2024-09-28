@@ -1,8 +1,9 @@
 import CharacterStats from "../components/charcterComponents/characterStats"
 import CharacterCustomization from "../components/charcterComponents/characterCustomization"
-import Context from "../components/context"
+import useOnlineStatus from "../hooks/onlineStatus.js"
+import Context from "../components/providers/context.js"
 import axios from 'axios'
-import classtypetostring from "../utils/converter"
+import Converter from "../utils/converter"
 import { useContext, useState, useEffect } from "react"
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +12,9 @@ export default function CharCreation() {
     const [userInfo, setUserInfo] = useContext(Context)
     const [userClass, setUserClass] = useState(0)
     const [returnMessage, setReturnMessage] = useState('')
+    const converter = new Converter()
+
+    useOnlineStatus()
 
     useEffect(() => {
         updateUserContext()
@@ -46,7 +50,7 @@ export default function CharCreation() {
             <div className="charCreationUserDiv">
                 <div className="charCreationUserTopDiv">
                     <h1>{userInfo.username}</h1>
-                    <h2>Type: {classtypetostring(userClass)}</h2>
+                    <h2>Type: {converter.spellClassToString(userClass)}</h2>
                     <div className="charCreationRowDiv">
                         <button onClick={() => setUserClass(0)}>Fire</button>
                         <button onClick={() => setUserClass(1)}>Water</button>

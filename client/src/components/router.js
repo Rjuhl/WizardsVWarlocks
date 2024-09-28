@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Outlet, useNavigate, useLocation } from 'react-router-dom'
+import { useEffect } from 'react';
 import SignIn from "../pages/signin"
 import Home from "../pages/home"
 import CharCreation from "../pages/character_creation"

@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react"
 import { useNavigate } from 'react-router-dom';
-import Context from '../components/context'
+import useOnlineStatus from "../hooks/onlineStatus.js"
+import Context from '../components/providers/context.js'
 import Spell from "../components/spell"
 import axios from "axios";
 
@@ -13,6 +14,8 @@ export default function EquipSpells() {
     const [removeButtonVisable, setRemoveButtonVisable] = useState(false)
     const [returnMessage, setReturnMessage] = useState('')
     const navigate = useNavigate()
+
+    useOnlineStatus()
 
     const updateReturnMessage = (message, success) => {
         if (success) {setReturnMessage(<p className="equip-page-success-message">{message}</p>)}
