@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from "react"
-import Context from '../components/context'
+import Context from '../components/providers/context.js'
+import useOnlineStatus from "../hooks/onlineStatus.js"
 import axios from 'axios'
 
 export default function AdminPage() {
@@ -17,6 +18,8 @@ export default function AdminPage() {
     const [returnMessage, setReturnMessage] = useState('')
     const [code, setCode] = useState('')
     const [id, setId] = useState(-1)
+
+    useOnlineStatus()
 
     const handleFlagInput = () => {
         /* flags should be of form [[index1:val1], [index2:val2], ... [indexn, valn]] */

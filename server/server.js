@@ -3,6 +3,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const router = require('./routes/router')
 const mongoose = require('mongoose')
+const socketHandler = require('./sockets/socketHandler')
 require('dotenv/config')
 
 const app = express()
@@ -28,3 +29,13 @@ const port = process.env.PORT
 const server = app.listen(port, () => {
     console.log(`Server is running on port ${port}`)
 })
+
+const io = require('socket.io')(server, {
+    cors: {
+        origin: "*", 
+        methods: ["GET", "POST"]
+    }
+});
+
+socketHandler(io);
+console.log("Socket connected")

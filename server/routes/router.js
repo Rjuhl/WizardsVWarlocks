@@ -74,16 +74,16 @@ router.post('/submitprofile', async (req, res) => {
     const verifyAttributePoints = (userInfo) => {
         const [health, mana, classMultiplier] = [userInfo.health, userInfo.mana, userInfo.classMultiplier]
 
-        if (health < baseHealth || mana < baseMana || classMultiplier < baseClassMultiplier) { return false }
+        if (health < baseHealth || mana < baseMana || classMultiplier < baseClassMultiplier) { console.log(0); return false }
 
         if (
             health > baseHealth + (totalPoints * healthIncrement) ||
             mana > baseMana + (totalPoints * manaIncrement) ||
             classMultiplier > baseClassMultiplier+ (totalPoints * classMultiplierIncrement)
-        ) { return false }
+        ) { console.log(1); return false }
         
         const pointsUsed = (value, base, increment) => {
-           const points = Math.ceil((((value - base) / increment) * 10000) / 10000)
+           const points = Math.round((((value - base) / increment) * 10000) / 10000)
            return points > 0 ? points : 0
         }
 
@@ -91,7 +91,7 @@ router.post('/submitprofile', async (req, res) => {
             pointsUsed(health, baseHealth, healthIncrement) + 
             pointsUsed(mana, baseMana, manaIncrement) + 
             pointsUsed(classMultiplier, baseClassMultiplier, classMultiplierIncrement) > 4
-        ) { return false }
+        ) { console.log(2); return false }
 
         return true
     }
@@ -99,11 +99,12 @@ router.post('/submitprofile', async (req, res) => {
     if (!verifyAttributePoints(user)) {
         res.status(201)
         res.send("!!!Invalid Character Values!!!")
-        res.end()
+    } else {
+        const result = await schemas.Users.replaceOne(filter, user);
+        if (result) {res.send("success")}
+        else {res.send("Failed to update user to database")}
+        
     }
-
-    const result = await schemas.Users.replaceOne(filter, user);
-    res.send("success")
     res.end()
 })
 

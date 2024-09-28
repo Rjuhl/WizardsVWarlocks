@@ -1,9 +1,10 @@
 import { useState, useEffect, useContext } from "react"
 import { useNavigate } from 'react-router-dom';
-import Context from '../components/context'
+import Context from '../components/providers/context.js'
 import CharacterCanvas from "../components/charcterComponents/character"
 import rgbtohsv from "../utils/rgbtohsv";
 import Converter from "../utils/converter";
+import useOnlineStatus from "../hooks/onlineStatus.js"
 
 // const [hatHsva, setHatHsva] = useState({ h: 0, s: 0, v: 68, a: 1 });
 // const [staffHsva, setStaffHsva] = useState({ h: 0, s: 0, v: 68, a: 1 });
@@ -21,6 +22,8 @@ export default function Home() {
     const admin = userInfo.admin || false
     const navigate = useNavigate();
     const converter = new Converter()
+    
+    useOnlineStatus();
 
     useEffect(() => {
     }, [setChallenge, setMoney])

@@ -1,7 +1,8 @@
 import { useState, useEffect, useContext } from "react"
 import { useNavigate } from 'react-router-dom';
+import useOnlineStatus from "../hooks/onlineStatus.js"
 import Spell from "../components/spell"
-import Context from '../components/context'
+import Context from '../components/providers/context.js'
 import axios from 'axios'
 
 
@@ -13,6 +14,8 @@ export default function Shop() {
     const [selectedSpell, setSelectedSpell] = useState(null)
     const [buttonsVisable, setButtonsVisable] = useState(false)
     const navigate = useNavigate()
+
+    useOnlineStatus()
 
     useEffect(() => {
         setNumSpells(totalSpells - userInfo.spellsOwned.length)

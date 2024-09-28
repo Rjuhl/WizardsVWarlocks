@@ -1,9 +1,8 @@
 import React, { useState, Fragment, useEffect, useContext } from 'react';
-import { hsvaToHex } from '@uiw/color-convert';
 import Wheel from '@uiw/react-color-wheel';
 import ShadeSlider from '@uiw/react-color-shade-slider';
 import CharacterCanvas from './character';
-import Context from '../context';
+import Context from '../providers/context';
 
 /* <div style={{ width: '100%', height: 34, marginTop: 20, background: hsvaToHex(hsva) }}></div> */
 

@@ -1,6 +1,7 @@
 import { useContext, useState } from "react"
 import { useNavigate } from 'react-router-dom';
-import Context from '../components/context'
+import useOnlineStatus from "../hooks/onlineStatus.js"
+import Context from '../components/providers/context.js'
 import axios from 'axios'
 
 export default function SignIn() {
@@ -12,6 +13,8 @@ export default function SignIn() {
     const [returnMessage, setReturnMessage] = useState('')
     const [userInfo, setUserInfo] = useContext(Context)
     const navigate = useNavigate();
+
+    useOnlineStatus()
 
     const handleSignUp = async (e) => {
         e.preventDefault()
