@@ -14,8 +14,6 @@ export default function CharCreation() {
     const [returnMessage, setReturnMessage] = useState('')
     const converter = new Converter()
 
-    useOnlineStatus()
-
     useEffect(() => {
         updateUserContext()
     }, [userClass])

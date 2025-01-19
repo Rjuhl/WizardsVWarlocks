@@ -16,6 +16,7 @@ export default function AdminPage() {
     const [description, setDescription] = useState('')
     const [flags, setFlags] = useState('')
     const [returnMessage, setReturnMessage] = useState('')
+    const [testResponse, setTestResponse] = useState('')
     const [code, setCode] = useState('')
     const [id, setId] = useState(-1)
 
@@ -65,48 +66,60 @@ export default function AdminPage() {
        
     }
 
+    const handleTest = async () => {
+        const response = await axios.get('http://localhost:4000/test', {})
+        response.status === 200 ? setTestResponse(response.data) : setTestResponse('Test API failed')
+    }
+
     const loadPage = () => {
         if (userInfo.admin) {
             return (
                 <>
-                <div className="admin-column-container">
-                    <h1 className="admin-column-item">Spell Creation</h1>
-                    <label className="admin-column-item">Spell Name</label>
-                    <input className="admin-column-item" type="text" id="name" onChange={(e) => setSpellName(e.target.value)}></input>
-
-                    <label className="admin-column-item">Spell Id</label>
-                    <input className="admin-column-item" type="text" id="id" onChange={(e) => setId(e.target.value)}></input>
-
-                    <label className="admin-column-item">Spell Type (0,1,2 = Attack/Block/Passive)</label>
-                    <input className="admin-column-item" type="text" id="spellType" onChange={(e) => setSpellType(e.target.value)}></input>
-
-                    <label className="admin-column-item">Spell Class (0,1,2,3 = Fire/Water/Electric/Basic)</label>
-                    <input className="admin-column-item" type="text" id="spellClass" onChange={(e) => setSpellClass(e.target.value)}></input>
-
-                    <label className="admin-column-item">Mana Cost</label>
-                    <input className="admin-column-item" type="text" id="manaCost" onChange={(e) => setManaCost(e.target.value)}></input>
-
-                    <label className="admin-column-item">Gold Cost</label>
-                    <input className="admin-column-item" type="text" id="goldCost" onChange={(e) => setGoldCost(e.target.value)}></input>
-
-                    <label className="admin-column-item">Ability</label>
-                    <input className="admin-column-item" type="text" id="ability" onChange={(e) => setAbility(e.target.value)}></input>
-
-                    <label className="admin-column-item">Ability die roll</label>
-                    <input className="admin-column-item" type="text" id="abilityDieRoll" onChange={(e) => setAbilityDieRoll(e.target.value)}></input>
-
-                    <label className="admin-column-item">Description</label>
-                    <input className="admin-column-item" type="text" id="description" onChange={(e) => setDescription(e.target.value)}></input>
-
-                    <label className="admin-column-item">Flags</label>
-                    <input className="admin-column-item" type="text" id="flags" onChange={(e) => setFlags(e.target.value)}></input>
-
-                    <label className="admin-column-item">Code</label>
-                    <input className="admin-column-item" type="text" id="code" onChange={(e) => setCode(e.target.value)}></input>
-
-                    {returnMessage}
-                    <button className="admin-column-item" onClick={() => handleSubmission()}>Submit Spell</button>
+                 <div className="admin-page-container">
+                    <div className="test-api-container">
+                        <h2>Test API</h2>
+                        <button className="test-api-button" onClick={ () => handleTest()}>Test</button>
+                        {testResponse}
                     </div>
+                    <div className="admin-column-container">
+                        <h1 className="admin-column-item">Spell Creation</h1>
+                        <label className="admin-column-item">Spell Name</label>
+                        <input className="admin-column-item" type="text" id="name" onChange={(e) => setSpellName(e.target.value)}></input>
+
+                        <label className="admin-column-item">Spell Id</label>
+                        <input className="admin-column-item" type="text" id="id" onChange={(e) => setId(e.target.value)}></input>
+
+                        <label className="admin-column-item">Spell Type (0,1,2 = Attack/Block/Passive)</label>
+                        <input className="admin-column-item" type="text" id="spellType" onChange={(e) => setSpellType(e.target.value)}></input>
+
+                        <label className="admin-column-item">Spell Class (0,1,2,3 = Fire/Water/Electric/Basic)</label>
+                        <input className="admin-column-item" type="text" id="spellClass" onChange={(e) => setSpellClass(e.target.value)}></input>
+
+                        <label className="admin-column-item">Mana Cost</label>
+                        <input className="admin-column-item" type="text" id="manaCost" onChange={(e) => setManaCost(e.target.value)}></input>
+
+                        <label className="admin-column-item">Gold Cost</label>
+                        <input className="admin-column-item" type="text" id="goldCost" onChange={(e) => setGoldCost(e.target.value)}></input>
+
+                        <label className="admin-column-item">Ability</label>
+                        <input className="admin-column-item" type="text" id="ability" onChange={(e) => setAbility(e.target.value)}></input>
+
+                        <label className="admin-column-item">Ability die roll</label>
+                        <input className="admin-column-item" type="text" id="abilityDieRoll" onChange={(e) => setAbilityDieRoll(e.target.value)}></input>
+
+                        <label className="admin-column-item">Description</label>
+                        <input className="admin-column-item" type="text" id="description" onChange={(e) => setDescription(e.target.value)}></input>
+
+                        <label className="admin-column-item">Flags</label>
+                        <input className="admin-column-item" type="text" id="flags" onChange={(e) => setFlags(e.target.value)}></input>
+
+                        <label className="admin-column-item">Code</label>
+                        <input className="admin-column-item" type="text" id="code" onChange={(e) => setCode(e.target.value)}></input>
+
+                        {returnMessage}
+                        <button className="admin-column-item" onClick={() => handleSubmission()}>Submit Spell</button>
+                    </div>
+                </div>
                 </>
             )
         }
