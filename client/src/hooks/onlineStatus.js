@@ -1,10 +1,8 @@
-import { useEffect, useContext, useRef } from 'react';
+import { useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 import Context from '../components/providers/context'
 import Online from '../components/providers/online';
-import io from 'socket.io-client';
-
-const socket = io('http://localhost:4000')
+import socket from '../socket'
 
 const useOnlineStatus = () => {
     const location = useLocation();
@@ -14,26 +12,27 @@ const useOnlineStatus = () => {
 
     useEffect(() => {
         if (userInfo !== null && location.pathname !== '/' && !online && !sentUpdate) {
+            socket.connect()
             socket.emit('userOnline', userInfo.username)
             setOnline(true)
             sentUpdate = true
         }
 
         if (userInfo !== null && location.pathname === '/' && online && !sentUpdate) {
-            socket.emit('userOffline', userInfo)
+            socket.emit('userOffline', userInfo.username)
             setUserInfo(null)
             setOnline(false)
             sentUpdate = true
+            socket.disconnect()
         }
 
         const handleBeforeUnload = () => {
             if (userInfo !== null) {
-                console.log('unloaded')
-                socket.emit('userOffline', userInfo.username);
+                socket.emit('userOffline', userInfo.username)
+                socket.disconnect()
             }
          }
 
-        //Needs testing with backend socket 
         window.addEventListener('beforeunload', handleBeforeUnload)
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload);

@@ -386,6 +386,60 @@ html, body {
 .admin-column-container button:hover {
   background-color: #0056b3; /* Darker shade on hover */
 }
+.admin-page-container {
+    display: flex;
+    flex-direction: row; /* Place child elements side by side */
+    justify-content: space-between; /* Add space between columns */
+    align-items: flex-start; /* Align items at the top */
+    padding: 20px;
+}
+
+.admin-column-container {
+    flex: 2; /* Takes up two parts of the available width */
+    margin-right: 20px;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.test-api-container {
+    flex: 1; /* Takes up one part of the available width */
+    background-color: #e6f7ff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center content */
+}
+
+.test-api-container h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #0056b3;
+}
+
+.test-api-input {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.test-api-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.test-api-button:hover {
+    background-color: #0056b3;
+}
 
 /* Shop page CSS */
 /* Styles for the spellForSale container */
@@ -576,4 +630,71 @@ html, body {
   text-align: center;
   margin-left: 10px;
   margin-right: 10px;
+}
+
+.homePage {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.userListSection {
+  width: 30%;
+  max-width: 300px;
+  padding: 10px;
+  margin: 10px;
+  background-color: #ffffff;
+  border-left: 1px solid #ddd;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.userListSection h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.userList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.userRow {
+  padding: 10px 15px;
+  font-size: 16px;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  margin: 5px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  text-align: left;
+}
+
+/* Alternating row colors */
+.userRow.evenRow {
+  background-color: #f9f9f9; /* Light background color */
+}
+
+.userRow.oddRow {
+  background-color: #e8f4ff; /* Slightly darker background color */
+}
+
+/* Hover effect */
+.userRow:hover {
+  background-color: #d0e8ff; /* Slightly highlighted color */
+  transform: translateY(-2px); /* Lift effect on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Active effect */
+.userRow:active {
+  background-color: #b0d4ff;
+  transform: translateY(0); /* Reset lift effect */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

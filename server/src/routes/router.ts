@@ -1,13 +1,15 @@
-const express = require('express')
-const router = express.Router()
-const schemas = require('../models/schemas')
-const crypto = require('crypto')
-require('dotenv/config')
+import express from 'express';
+import crypto from 'crypto';
+import dotenv from 'dotenv';
+import schemas from '../models/schemas'; 
+import { IUserInfo } from '../resources/interfaces/router/IUserInfo';
 
+dotenv.config();
+
+const router = express.Router();
 // router.get('/users', (req, res) => {})
 // const schemaExample = new schemas.Users({user:xyzm, ...})
 // const saveSchemaExample = await schemaExample.save()
-
 
 router.post('/signup', async (req, res) => {
     const { username, password, accessCode, adminCode } = req.body;
@@ -43,10 +45,10 @@ router.post('/signup', async (req, res) => {
 
 router.get('/login', async (req, res) => {
     const {username, password} = req.query
-    const hashedPassword = crypto.createHash('sha1').update(password).digest('hex');
+    const hashedPassword = crypto.createHash('sha1').update(password as string).digest('hex');
 
     const userData = {username: username, password: hashedPassword}
-    userContext = await schemas.Users.where(userData).findOne()
+    const userContext = await schemas.Users.where(userData).findOne()
 
     if (userContext === null) {
         res.status(201)
@@ -71,7 +73,7 @@ router.post('/submitprofile', async (req, res) => {
     const [baseHealth, baseMana, baseClassMultiplier] = [100, 8, 1.0]
     const filter = {username: user.username}
     
-    const verifyAttributePoints = (userInfo) => {
+    const verifyAttributePoints = (userInfo: IUserInfo) => {
         const [health, mana, classMultiplier] = [userInfo.health, userInfo.mana, userInfo.classMultiplier]
 
         if (health < baseHealth || mana < baseMana || classMultiplier < baseClassMultiplier) { console.log(0); return false }
@@ -82,7 +84,7 @@ router.post('/submitprofile', async (req, res) => {
             classMultiplier > baseClassMultiplier+ (totalPoints * classMultiplierIncrement)
         ) { console.log(1); return false }
         
-        const pointsUsed = (value, base, increment) => {
+        const pointsUsed = (value: number, base: number, increment: number) => {
            const points = Math.round((((value - base) / increment) * 10000) / 10000)
            return points > 0 ? points : 0
         }
@@ -122,10 +124,20 @@ router.post('/addspell', async (req, res) => {
         const numSpells = await schemas.Spells.countDocuments()
         spell.id = numSpells
         const spellSchema = new schemas.Spells(spell)
-        success = await spellSchema.save()
+        const savedSpell = await spellSchema.save();
+        if (savedSpell) {
+            res.send("Success");
+        } else {
+            res.status(500).send("Failed to create spell. Please try again.");
+        }
     } else {
         const filter = {id: spell.id}
-        success = await schemas.Spells.replaceOne(filter, spell);
+        const updateResult = await schemas.Spells.replaceOne(filter, spell);
+        if (updateResult.modifiedCount > 0) {
+            res.send("Success");
+        } else {
+            res.status(500).send("Failed to update spell. Please try again.");
+        }
     }
 
     if (success) {
@@ -141,6 +153,11 @@ router.get('/spell', async (req, res) => {
     const id = req.query.id
     const spell =  await schemas.Spells.where({id: id}).findOne()
     res.send({ spell: spell })
+    res.end()
+})
+
+router.get('/test', async (req, res) => {
+    res.send('Test Result')
     res.end()
 })
 
@@ -244,4 +261,4 @@ router.post('/deactivateSpell', async (req, res) => {
 
 })
 
-module.exports = router
+export default router;

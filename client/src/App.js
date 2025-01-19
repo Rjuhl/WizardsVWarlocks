@@ -1,7 +1,8 @@
 import './App.css';
 import Router from './components/router'
 import Context from './components/providers/context'
-import Online from './components/providers/online';
+import Online from './components/providers/online'
+import useOnlineStatus from './hooks/onlineStatus'
 import { useState } from 'react'
 
 function App() {
