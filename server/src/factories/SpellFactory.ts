@@ -100,6 +100,7 @@ export class SpellFactory {
         spell.setReadsOpponent(spellData.flags[Flag.READ_OPPONENT])
         spell.setReselectSpells(spellData.flags[Flag.RESELECT_SPELLS])
         spell.setGainManaFromDamage(spellData.flags[Flag.GAIN_MANA_FROM_DAMAGE])
+        spell.setSelfInflictedDamage(spellData.flags[Flag.SELF_INFLICTED_DAMAGE])
         spell.setModifier(
             spellData.flags[Flag.MODIFIER_AMOUNT],
             spellData.flags[Flag.MODIFIER_TYPE],

@@ -20,4 +20,5 @@ export interface ISpell {
     readsOpponent: boolean,
     reselectSpells: boolean,
     gainManaFromDamage: boolean,
+    selfInflictedDamage: boolean,
 }
