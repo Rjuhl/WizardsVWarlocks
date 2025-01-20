@@ -1,5 +1,6 @@
 export enum GameEndTypes {
-    WIN,
-    LOSE,
-    TIE
+    PLAYER_1_WINS,
+    PLAYER_2_WINS,
+    TIE,
+    ONGOING
 }

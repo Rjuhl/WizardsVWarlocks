@@ -1,5 +1,7 @@
-export enum SpellRolls {
+export enum SpellRoles {
     ATTACK,
     DEFENSE,
-    STATIC
+    HEALING,
+    RECHARGE,
+    NONE
 }
