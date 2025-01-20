@@ -68,7 +68,7 @@ export default function AdminPage() {
 
     const handleTest = async () => {
         const response = await axios.get('http://localhost:4000/test', {})
-        response.status === 200 ? setTestResponse(response.data) : setTestResponse('Test API failed')
+        response.status === 200 ? setTestResponse(JSON.stringify(response.data)) : setTestResponse('Test API failed')
     }
 
     const loadPage = () => {
@@ -79,6 +79,7 @@ export default function AdminPage() {
                     <div className="test-api-container">
                         <h2>Test API</h2>
                         <button className="test-api-button" onClick={ () => handleTest()}>Test</button>
+                        <p></p>
                         {testResponse}
                     </div>
                     <div className="admin-column-container">

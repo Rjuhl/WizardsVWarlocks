@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import dotenv from 'dotenv';
 import schemas from '../models/schemas'; 
 import { IUserInfo } from '../resources/interfaces/router/IUserInfo';
+import { SpellFactory } from '../factories/SpellFactory';
 
 dotenv.config();
 
@@ -157,7 +158,10 @@ router.get('/spell', async (req, res) => {
 })
 
 router.get('/test', async (req, res) => {
-    res.send('Test Result')
+    const spellFactory = new SpellFactory()
+    const spell = await spellFactory.getSpell(1)
+    console.log(spell)
+    res.send({spell: spell})
     res.end()
 })
 

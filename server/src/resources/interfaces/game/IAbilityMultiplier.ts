@@ -1,4 +1,4 @@
-import { SpellRolls } from "../../types/SpellRoles";
+import { SpellRoles } from "../../types/SpellRoles";
 import { SpellTypes } from "../../types/SpellTypes"
 import { ISpell } from "./ISpell";
 
@@ -6,6 +6,7 @@ import { ISpell } from "./ISpell";
 export interface IAbilityMultiplier {
     multiplier: number,
     type: SpellTypes,
-    role: SpellRolls,
+    role: SpellRoles,
+    applyCondition(castSpell: ISpell): boolean
     deleteCondition(castSpell: ISpell): boolean
 }
