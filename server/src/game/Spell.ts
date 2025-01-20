@@ -22,6 +22,7 @@ export class Spell implements ISpell {
     readsOpponent: boolean = false;
     reselectSpells: boolean = false;
     gainManaFromDamage: boolean = false;
+    selfInflictedDamage: boolean = false;
 
     setDamage(base: number, die: number, numRolls: number) {
         this.damage = {
@@ -94,6 +95,10 @@ export class Spell implements ISpell {
 
     setGainManaFromDamage(isTrue: number) {
         this.gainManaFromDamage = Boolean(isTrue)
+    }
+
+    setSelfInflictedDamage(isTrue: number) {
+        this.selfInflictedDamage = Boolean(isTrue)
     }
 
     setSpellRole(role: SpellRoles) {
