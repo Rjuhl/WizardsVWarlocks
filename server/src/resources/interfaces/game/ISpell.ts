@@ -14,6 +14,7 @@ export interface ISpell {
     firstStrike: boolean,
     charageable: boolean,
     ignites: boolean,
+    freezes: boolean,
     negatesFireDamge: boolean,
     negateBlockOverflowModifier: boolean,
     modifier: IAbilityMultiplier | null,
@@ -21,4 +22,5 @@ export interface ISpell {
     reselectSpells: boolean,
     gainManaFromDamage: boolean,
     selfInflictedDamage: boolean,
+    blockModifierType: SpellTypes,
 }
