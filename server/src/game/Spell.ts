@@ -15,6 +15,7 @@ export class Spell implements ISpell {
     spellRole: SpellRoles = SpellRoles.NONE;
     firstStrike: boolean = false;
     charageable: boolean = false;
+    freezes: boolean = false;
     ignites: boolean = false;
     negatesFireDamge: boolean = false;
     negateBlockOverflowModifier: boolean = false;
@@ -23,6 +24,7 @@ export class Spell implements ISpell {
     reselectSpells: boolean = false;
     gainManaFromDamage: boolean = false;
     selfInflictedDamage: boolean = false;
+    blockModifierType: SpellTypes = SpellTypes.NONE;
 
     setDamage(base: number, die: number, numRolls: number) {
         this.damage = {
@@ -101,8 +103,16 @@ export class Spell implements ISpell {
         this.selfInflictedDamage = Boolean(isTrue)
     }
 
+    setFreezes(isTrue: number) {
+        this.freezes = Boolean(isTrue)
+    }
+
     setSpellRole(role: SpellRoles) {
         this.spellRole = role
+    }
+
+    setBlockModifierType(type: SpellTypes) {
+        this.blockModifierType = type
     }
 
     setModifier(modifierAmount: number, modiferType: SpellTypes, modifierRole: SpellRoles, removeAfterUse: number) {

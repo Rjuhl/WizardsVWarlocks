@@ -14,4 +14,6 @@ export enum Flag {
     GAIN_MANA_FROM_DAMAGE = 12,
     ADD_MODIFIER = 13,
     SELF_INFLICTED_DAMAGE = 14,
+    FREEZES = 15,
+    BLOCK_MODIFIER_TYPE = 16,
 }
