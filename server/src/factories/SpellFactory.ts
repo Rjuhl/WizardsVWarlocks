@@ -104,6 +104,7 @@ export class SpellFactory {
         spell.setGainManaFromDamage(spellData.flags[Flag.GAIN_MANA_FROM_DAMAGE])
         spell.setSelfInflictedDamage(spellData.flags[Flag.SELF_INFLICTED_DAMAGE])
         spell.setFreezes(spellData.flags[Flag.FREEZES])
+        spell.setHasBlockModifer(spellData.flags[Flag.HAS_BLOCK_MODIFER])
         spell.setBlockModifierType(this.getType(spellData.flags[Flag.BLOCK_MODIFIER_TYPE]))
         spell.setModifier(
             spellData.flags[Flag.MODIFIER_AMOUNT],

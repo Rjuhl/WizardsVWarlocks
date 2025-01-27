@@ -22,5 +22,6 @@ export interface ISpell {
     reselectSpells: boolean,
     gainManaFromDamage: boolean,
     selfInflictedDamage: boolean,
+    hasBlockModifer: boolean,
     blockModifierType: SpellTypes,
 }

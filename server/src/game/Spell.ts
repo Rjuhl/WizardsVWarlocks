@@ -24,6 +24,7 @@ export class Spell implements ISpell {
     reselectSpells: boolean = false;
     gainManaFromDamage: boolean = false;
     selfInflictedDamage: boolean = false;
+    hasBlockModifer: boolean = false;
     blockModifierType: SpellTypes = SpellTypes.NONE;
 
     setDamage(base: number, die: number, numRolls: number) {
@@ -107,6 +108,10 @@ export class Spell implements ISpell {
         this.freezes = Boolean(isTrue)
     }
 
+    setHasBlockModifer(isTrue: number) {
+        this.hasBlockModifer = Boolean(isTrue)
+    }
+
     setSpellRole(role: SpellRoles) {
         this.spellRole = role
     }
@@ -116,12 +121,19 @@ export class Spell implements ISpell {
     }
 
     setModifier(modifierAmount: number, modiferType: SpellTypes, modifierRole: SpellRoles, removeAfterUse: number) {
-        modifierAmount !== 0 ?
-        this.modifier = new AbilityMultiplier(
-            modifierAmount, 
-            modiferType, 
-            modifierRole, 
-            Boolean(removeAfterUse)
-        ) : this.modifier = null
+        if (modifierAmount !== 0) {
+            const index = Number(modifierAmount.toString()[0])
+            let strNum = modifierAmount.toString().slice(1)
+            modifierAmount = Number(strNum.slice(0, index) + '.' + strNum.slice(index, strNum.length))
+
+            this.modifier = new AbilityMultiplier(
+                modifierAmount, 
+                modiferType, 
+                modifierRole, 
+                Boolean(removeAfterUse)
+            )
+        } else {
+            this.modifier = null
+        }
     }
 }

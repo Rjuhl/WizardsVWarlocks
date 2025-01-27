@@ -20,7 +20,7 @@ export default function Shop() {
 
     useEffect(() => {
         setNumSpells(TOTAL_SPELLS - userInfo.spellsOwned.length)
-    }, [setUserInfo, setNumRows])
+    }, [userInfo])
 
 
     const getSpellPartitions = () => {
@@ -122,7 +122,7 @@ export default function Shop() {
             <label>Rows: </label>
             {numRows}
             <button className="shop-home-button" onClick={() => setNumRows(Math.min(numRows + 1, 5))}>+</button>
-            <button className="shop-home-button" onClick={() =>  setNumRows(Math.max(numRows - 1, 2))}>-</button>
+            <button className="shop-home-button" onClick={() => setNumRows(Math.max(numRows - 1, 2))}>-</button>
         </div>
         {displaySpells()}
         </>
