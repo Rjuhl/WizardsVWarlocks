@@ -5,13 +5,13 @@ import Spell from "../components/spell"
 import Context from '../components/providers/context.js'
 import axios from 'axios'
 
-
+// NEED TO UPDATE TOTAL SPELLS WHEN ADDING MORE SPELLS 
+const TOTAL_SPELLS = 22
 export default function Shop() {
-    // NEED TO UPDATE TOTAL SPELLS WHEN ADDING MORE SPELLS 
-    const totalSpells = 8
-    const numRows = 2
+    const baseNumRows = 2
+    const [numRows, setNumRows] = useState(baseNumRows)
     const [userInfo, setUserInfo] = useContext(Context)
-    const [numSpells, setNumSpells] = useState(totalSpells - userInfo.spellsOwned.length)
+    const [numSpells, setNumSpells] = useState(TOTAL_SPELLS - userInfo.spellsOwned.length)
     const [selectedSpell, setSelectedSpell] = useState(null)
     const [buttonsVisable, setButtonsVisable] = useState(false)
     const navigate = useNavigate()
@@ -19,15 +19,15 @@ export default function Shop() {
     useOnlineStatus()
 
     useEffect(() => {
-        setNumSpells(totalSpells - userInfo.spellsOwned.length)
-    }, [setUserInfo])
+        setNumSpells(TOTAL_SPELLS - userInfo.spellsOwned.length)
+    }, [setUserInfo, setNumRows])
 
 
     const getSpellPartitions = () => {
         let spellPartition = []
         let currentSpellRow = []
         const spellsInRow = Math.ceil(numSpells / numRows)
-        const spellsInShop = [...Array(totalSpells).keys()].filter((x) => !(userInfo.spellsOwned.includes(x)))
+        const spellsInShop = [...Array(TOTAL_SPELLS).keys()].filter((x) => !(userInfo.spellsOwned.includes(x)))
         for (let i = 0; i < numSpells; i++) {
             if (currentSpellRow.length === spellsInRow) {
                 spellPartition.push(currentSpellRow)
@@ -117,6 +117,12 @@ export default function Shop() {
             <button className="shop-home-button" onClick={() => navigate('/home')}>Home</button>
             <h1 className="shop-title">Shop</h1>
             <h2 className="shop-gold-cost">Gold: {userInfo.money}</h2>
+        </div>
+        <div className="numrows-container">
+            <label>Rows: </label>
+            {numRows}
+            <button className="shop-home-button" onClick={() => setNumRows(Math.min(numRows + 1, 5))}>+</button>
+            <button className="shop-home-button" onClick={() =>  setNumRows(Math.max(numRows - 1, 2))}>-</button>
         </div>
         {displaySpells()}
         </>

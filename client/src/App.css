@@ -496,6 +496,24 @@ html, body {
   background-color: #45a049; /* Darker green on hover */
 }
 
+.numrows-container {
+  display: flex;               /* Use Flexbox for alignment */
+  flex-direction: row;      /* Arrange children in a column */
+  justify-content:flex-start;
+  align-items: center;
+  gap: 1rem;                   /* Add spacing between elements */
+  padding-top: 0.5rem;  
+  padding-bottom: 0.5rem;           /* Add padding inside the container */
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border: 1px solid #ddd;      /* Light border for a clean look */
+  border-radius: 8px;          /* Rounded corners for a softer look */
+  background-color: #f9f9f9;   /* Subtle background color */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+  max-width: 200px;            /* Limit the container's width */
+  margin: 1rem 1rem;           /* Center it horizontally and add vertical margin */
+}
+
 /* Cancel (X) button styling */
 .cancel-button {
   display: flex;

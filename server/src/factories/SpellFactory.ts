@@ -38,6 +38,8 @@ export class SpellFactory {
                 return SpellRoles.HEALING
             case 3:
                 return SpellRoles.RECHARGE
+            case 4:
+                return SpellRoles.PASSIVE
             default:
                 console.log('spellRole value incorrect (!=0|1|2|3');
                 return SpellRoles.NONE
