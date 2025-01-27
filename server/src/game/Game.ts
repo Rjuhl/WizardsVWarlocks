@@ -237,6 +237,8 @@ export class Game  {
     }
 
     private getManaSpent(spell: ISpell, manaSpent: number, playerState: IPLayerState) {
+        //NOTE MANA COSTS CAN BE 0. WE NEED TO ACCOUT FOR THIS
+
         let spellCost = spell.manaCost;
         if (playerState.frozen) {
             if (spell.spellRole !== SpellRoles.RECHARGE) spellCost *= 2;
