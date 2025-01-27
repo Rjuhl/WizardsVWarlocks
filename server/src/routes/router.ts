@@ -120,34 +120,35 @@ router.post('/addspell', async (req, res) => {
         res.end()
         return
     }
-
-    if (spell.id === -1) {
+    
+    if (spell.id === '-1') {
         const numSpells = await schemas.Spells.countDocuments()
         spell.id = numSpells
         const spellSchema = new schemas.Spells(spell)
         const savedSpell = await spellSchema.save();
-        if (savedSpell) {
-            res.send("Success");
-        } else {
+        if (!savedSpell) {
             res.status(500).send("Failed to create spell. Please try again.");
+            res.end()
+            return;
         }
     } else {
         const filter = {id: spell.id}
         const updateResult = await schemas.Spells.replaceOne(filter, spell);
-        if (updateResult.modifiedCount > 0) {
-            res.send("Success");
-        } else {
+        if (!(updateResult.modifiedCount > 0)) {
             res.status(500).send("Failed to update spell. Please try again.");
+            res.end()
+            return;
         }
     }
 
-    if (success) {
-        res.send("Success")
-    } else {
+    if (!success) {
         res.send("Failed to create spell. Please try again.")
+        res.end()
+        return;
     }
-
-    res.end()
+    
+    res.send("Success");
+    res.end();
 }) 
 
 router.get('/spell', async (req, res) => {
@@ -171,23 +172,18 @@ router.post('/buySpell', async (req, res) => {
     let user = await schemas.Users.where({ username:username, password:password }).findOne()
 
     if (user === null || spell === null) {
-        res.status(201)
-        res.send("Null user or spell")
-        res.end()
+        res.status(201).send("Null user or spell")
         return
     }
 
     if (spell.goldCost > user.money) {
-        res.status(201)
-        res.send("User does not have sufficient gold to purchase spell")
-        res.end()
+        res.status(201).send("User does not have sufficient gold to purchase spell")
         return
     }
 
     if (user.spellsOwned.includes(spell.id)) {
-        res.status(201)
-        res.send('spell already bought')
-        res.end()
+        res.status(201).send('spell already bought')
+        return
     }
 
     user.money -= spell.goldCost
@@ -196,10 +192,8 @@ router.post('/buySpell', async (req, res) => {
 
     if(result) {res.send(user)}
     else {
-        res.status(201)
-        res.send("Failed to purchase spell")
+        res.status(201).send("Failed to purchase spell")
     }
-    res.end()
 })
 
 router.post('/setActiveSpell', async (req, res) => {
