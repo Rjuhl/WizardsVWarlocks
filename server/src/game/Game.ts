@@ -94,7 +94,7 @@ export class Game  {
         if (defendingSpell.spellRole === SpellRoles.DEFENSE) defendingRoll *= this.applyActiveModifiers(defendingPlayer, defendingSpell, defendingChargedModifier);
 
         // Check if block is extra effective
-        if (defendingSpell.blockModifierType === attackingSpell.spellClass) defendingRoll += (4 * defendingChargedModifier);
+        if (defendingSpell.hasBlockModifer && defendingSpell.blockModifierType === attackingSpell.spellClass) defendingRoll += (4 * defendingChargedModifier);
 
         if (defendingSpell.spellRole === SpellRoles.DEFENSE) {
             attackRoll -= defendingRoll
