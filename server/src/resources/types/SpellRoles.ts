@@ -4,5 +4,6 @@ export enum SpellRoles {
     HEALING,
     RECHARGE,
     PASSIVE,
-    NONE
+    NONE,
+    ALL
 }

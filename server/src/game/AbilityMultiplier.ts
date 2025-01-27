@@ -17,7 +17,7 @@ export class AbilityMultiplier implements IAbilityMultiplier {
     applyCondition(castSpell: ISpell): boolean {
         return (
             ((this.type === castSpell.spellClass) || (this.type === SpellTypes.ALL)) &&
-            this.role === castSpell.spellRole
+            ((this.role === castSpell.spellRole) || (this.role === SpellRoles.ALL))
         )
     }
 

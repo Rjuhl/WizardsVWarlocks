@@ -266,7 +266,7 @@ export class Game  {
         }
     }
 
-    public getPlayerState(playerId: number) {
+    public getPlayerState(playerId: string) {
         if (this.gameState.player1.playerId === playerId) return this.gameState.player1;
         if (this.gameState.player2.playerId === playerId) return this.gameState.player2;
         return null;
