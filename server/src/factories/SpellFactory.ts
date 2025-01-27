@@ -40,6 +40,10 @@ export class SpellFactory {
                 return SpellRoles.RECHARGE
             case 4:
                 return SpellRoles.PASSIVE
+            case 5: 
+                return SpellRoles.NONE
+            case 6: 
+                return SpellRoles.ALL
             default:
                 console.log('spellRole value incorrect (!=0|1|2|3');
                 return SpellRoles.NONE

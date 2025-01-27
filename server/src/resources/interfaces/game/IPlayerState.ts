@@ -2,7 +2,7 @@ import { IBasicStats } from "./IBasicStats"
 import { IAbilityMultiplier } from "./IAbilityMultiplier"
 
 export interface IPLayerState {
-    playerId: number,
+    playerId: string,
     playerStats: IBasicStats,
     modifiers: Array<IAbilityMultiplier>,
     manaCostMultiplier: number,
