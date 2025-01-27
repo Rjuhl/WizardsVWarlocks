@@ -76,12 +76,12 @@ export default function AdminPage() {
             return (
                 <>
                  <div className="admin-page-container">
-                    <div className="test-api-container">
+                    {/* <div className="test-api-container">
                         <h2>Test API</h2>
                         <button className="test-api-button" onClick={ () => handleTest()}>Test</button>
                         <p></p>
                         {testResponse}
-                    </div>
+                    </div> */}
                     <div className="admin-column-container">
                         <h1 className="admin-column-item">Spell Creation</h1>
                         <label className="admin-column-item">Spell Name</label>

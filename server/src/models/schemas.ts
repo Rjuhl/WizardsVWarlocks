@@ -1,7 +1,6 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IUser extends Document {
-    id: string;
     admin: boolean;
     username: string;
     password: string;
@@ -14,7 +13,6 @@ export interface IUser extends Document {
     money: number;
     activeSpells: number[];
     spellsOwned: number[];
-    entryDate: Date;
 }
 
 export interface IDatabaseSpell extends Document {
@@ -33,20 +31,18 @@ export interface IDatabaseSpell extends Document {
 
 // Define the user schema
 const userSchema = new Schema<IUser>({
-    id: { type: String, required: true },
     admin: { type: Boolean, default: false },
     username: { type: String, required: true },
     password: { type: String, required: true },
-    hatColor: { type: [String], maxItems: 3 },
-    staffColor: { type: [String], maxItems: 3 },
-    health: { type: Number, required: true },
-    mana: { type: Number, required: true },
-    classMultiplier: { type: Number, required: true },
+    hatColor: { type: [String], maxItems: 3, default: [''] },
+    staffColor: { type: [String], maxItems: 3, default: [''] },
+    health: { type: Number, required: true, default: 0 },
+    mana: { type: Number, required: true, default: 0 },
+    classMultiplier: { type: Number, required: true, default: 0},
     class: { type: Number, default: -1 },
     money: { type: Number, default: 100 },
     activeSpells: { type: [Number], maxItems: 6, uniqueItems: true },
     spellsOwned: { type: [Number], maxItems: 20, uniqueItems: true },
-    entryDate: { type: Date, default: Date.now },
 });
 
 // Define the spell schema

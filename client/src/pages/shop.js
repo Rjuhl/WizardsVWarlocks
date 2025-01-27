@@ -7,10 +7,11 @@ import axios from 'axios'
 
 
 export default function Shop() {
-    const totalSpells = 7
+    // NEED TO UPDATE TOTAL SPELLS WHEN ADDING MORE SPELLS 
+    const totalSpells = 8
     const numRows = 2
     const [userInfo, setUserInfo] = useContext(Context)
-    const [numSpells, setNumSpells] = useState(totalSpells)
+    const [numSpells, setNumSpells] = useState(totalSpells - userInfo.spellsOwned.length)
     const [selectedSpell, setSelectedSpell] = useState(null)
     const [buttonsVisable, setButtonsVisable] = useState(false)
     const navigate = useNavigate()
@@ -21,17 +22,19 @@ export default function Shop() {
         setNumSpells(totalSpells - userInfo.spellsOwned.length)
     }, [setUserInfo])
 
+
     const getSpellPartitions = () => {
         let spellPartition = []
         let currentSpellRow = []
         const spellsInRow = Math.ceil(numSpells / numRows)
-        for (let i = 0; i < totalSpells; i++) {
+        const spellsInShop = [...Array(totalSpells).keys()].filter((x) => !(userInfo.spellsOwned.includes(x)))
+        for (let i = 0; i < numSpells; i++) {
             if (currentSpellRow.length === spellsInRow) {
                 spellPartition.push(currentSpellRow)
                 currentSpellRow = []
             }
             if (!userInfo.spellsOwned.includes(i.toString())) {
-                currentSpellRow.push(i)
+                currentSpellRow.push(spellsInShop[i])
             }
         }
         

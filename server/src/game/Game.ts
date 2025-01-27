@@ -186,7 +186,7 @@ export class Game  {
         if (spell1.modifier) this.gameState.player1.modifiers.push(spell1.modifier);
         if (spell2.modifier) this.gameState.player2.modifiers.push(spell2.modifier);
 
-        // Reveal Player spells
+        // Reveal Player spells NOTE NEED TO ALLOW PLAYER STATS TO BE VISABLE TOO
         if (spell1.readsOpponent) this.gameState.player1.observedSpells = this.gameState.player2.spells
         if (spell2.readsOpponent) this.gameState.player2.observedSpells = this.gameState.player1.spells
 
