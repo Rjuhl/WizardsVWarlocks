@@ -199,8 +199,8 @@ export class Game  {
         if (this.winner() !== GameEndTypes.ONGOING) return this.winner();
 
         // Resolve Healing 
-        this.gameState.player1.playerStats.health += this.makeRoll(spell1.healing.numRolls, spell1.healing.die, spell1.healing.base);
-        this.gameState.player2.playerStats.health += this.makeRoll(spell2.healing.numRolls, spell2.healing.die, spell2.healing.base);
+        this.gameState.player1.playerStats.health += this.makeRoll(spell1.healing.numRolls, spell1.healing.die, spell1.healing.base) * chargeModifier1;
+        this.gameState.player2.playerStats.health += this.makeRoll(spell2.healing.numRolls, spell2.healing.die, spell2.healing.base) * chargeModifier2;
        
         //Resolve Damage
         let playerDamages = [0, 0]
@@ -279,8 +279,8 @@ export class Game  {
         // get charge modifiers
         const player1ManaSpent = this.getManaSpent(player1Spell, player1Turn.manaSpent, this.gameState.player1);
         const player2ManaSpent = this.getManaSpent(player2Spell, player2Turn.manaSpent, this.gameState.player2);
-        const player1ChargeModifier = Math.floor(player1ManaSpent / player1Spell.manaCost);
-        const player2ChargeModifier = Math.floor(player2ManaSpent / player2Spell.manaCost);
+        const player1ChargeModifier = (player1Spell.manaCost === 0) ? 0 : Math.floor(player1ManaSpent / player1Spell.manaCost);
+        const player2ChargeModifier = (player2Spell.manaCost === 0) ? 0 : Math.floor(player2ManaSpent / player2Spell.manaCost);
         this.gameState.player1.playerStats.mana -= player1ManaSpent;
         this.gameState.player2.playerStats.mana -= player2ManaSpent;
 
