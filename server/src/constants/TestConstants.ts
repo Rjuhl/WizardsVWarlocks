@@ -5,6 +5,7 @@ export type DynamicObject = {
     [key: string]: any; 
 };
 
+
 export const InitSpellRolls = async () => {
     const SPELL_ROLL: DynamicObject = {};
     const keys = Object.keys(Spells);
@@ -17,5 +18,8 @@ export const InitSpellRolls = async () => {
         SPELL_ROLL[keys[loops + i]] = spellData.abilityBase + spellData.abilityDie + spellData.abilityNumDie;
     };
 
+    // Additional roll values to add [NEED CHANGED MANUALLY IF UPDATED]
+    SPELL_ROLL["IGNITED"] = 7
+    SPELL_ROLL["SELF_INFLICTED_DAMAGE"] = 7
     return SPELL_ROLL;
 };
