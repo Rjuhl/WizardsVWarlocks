@@ -56,24 +56,7 @@ const buildPlayerState = (
     if (observedStats) playerState.observedStats = observedStats;
     return playerState
 };
-describe("Basic tests", () => {
-    let game: Game;
-
-    beforeEach(() => {
-        const player1State = buildPlayerState(
-            'player_a', 'password',
-            100, 10, 1, 0
-        );
-        const player2State = buildPlayerState(
-            'player_b', 'password',
-            100, 10, 1, 0
-        );
-        game = new Game({
-            player1: player1State,
-            player2: player2State
-        });
-    });
-
+describe("Game Test", () => {
     beforeAll(async () => {
         mongoose
         .connect(DB_URI)
@@ -85,36 +68,104 @@ describe("Basic tests", () => {
         await mongoose.disconnect();    
     });
 
-    it("Test Attack on Attack", async () => {
-        const aTurn = buildPlayerTurn(6, 1);
-        const bTurn = buildPlayerTurn(6, 1);
-        const turnResponse = await game.completeTurn(aTurn, bTurn)
-        expect(turnResponse.gameState.player1.playerStats.health).toBe(100 - 12);
-        expect(turnResponse.gameState.player2.playerStats.health).toBe(100 - 12);
-        expect(turnResponse.gamePhase).toBe(GameEndTypes.ONGOING);
-    });
-
-    it("Test Attack and Block - no damage", async () => {
-        const aTurn = buildPlayerTurn(6, 1);
-        const bTurn = buildPlayerTurn(7, 1);
-        const turnResponse = await game.completeTurn(aTurn, bTurn)
-        expect(turnResponse.gameState.player1.playerStats.health).toBe(100);
-        expect(turnResponse.gameState.player2.playerStats.health).toBe(100);
-        expect(turnResponse.gamePhase).toBe(GameEndTypes.ONGOING);
-    })
-
-    it("Test Attack and Block - with damage", async () => {
-        const aTurn = buildPlayerTurn(6, 2);
-        const bTurn = buildPlayerTurn(7, 1);
-        const turnResponse = await game.completeTurn(aTurn, bTurn)
-        expect(turnResponse.gameState.player1.playerStats.health).toBe(100);
-        expect(turnResponse.gameState.player2.playerStats.health).toBe(100 - 4);
-        expect(turnResponse.gamePhase).toBe(GameEndTypes.ONGOING);
-    })
-
+    describe("Basic tests", () => {
+        let game: Game;
     
-
+        beforeEach(() => {
+            const player1State = buildPlayerState(
+                'player_a', 'password',
+                100, 10, 1, 0
+            );
+            const player2State = buildPlayerState(
+                'player_b', 'password',
+                100, 10, 1, 0
+            );
+            game = new Game({
+                player1: player1State,
+                player2: player2State
+            });
+        });
+    
+        it("Test Attack on Attack", async () => {
+            const aTurn = buildPlayerTurn(6, 1);
+            const bTurn = buildPlayerTurn(6, 1);
+            const turnResponse = await game.completeTurn(aTurn, bTurn)
+            expect(turnResponse.gameState.player1.playerStats.health).toBe(100 - 12);
+            expect(turnResponse.gameState.player2.playerStats.health).toBe(100 - 12);
+            expect(turnResponse.gameState.player1.playerStats.mana).toBe(9)
+            expect(turnResponse.gameState.player2.playerStats.mana).toBe(9)
+            expect(turnResponse.gamePhase).toBe(GameEndTypes.ONGOING);
+        });
+    
+        it("Test Attack and Block - no damage", async () => {
+            const aTurn = buildPlayerTurn(6, 1);
+            const bTurn = buildPlayerTurn(7, 1);
+            const turnResponse = await game.completeTurn(aTurn, bTurn)
+            expect(turnResponse.gameState.player1.playerStats.health).toBe(100);
+            expect(turnResponse.gameState.player2.playerStats.health).toBe(100);
+            expect(turnResponse.gameState.player1.playerStats.mana).toBe(9)
+            expect(turnResponse.gameState.player2.playerStats.mana).toBe(9)
+            expect(turnResponse.gamePhase).toBe(GameEndTypes.ONGOING);
+        });
+    
+        it("Test Attack and Block - with damage", async () => {
+            const aTurn = buildPlayerTurn(6, 2);
+            const bTurn = buildPlayerTurn(7, 1);
+            const turnResponse = await game.completeTurn(aTurn, bTurn)
+            expect(turnResponse.gameState.player1.playerStats.health).toBe(100);
+            expect(turnResponse.gameState.player2.playerStats.health).toBe(100 - 4);
+            expect(turnResponse.gameState.player1.playerStats.mana).toBe(8)
+            expect(turnResponse.gameState.player2.playerStats.mana).toBe(9)
+            expect(turnResponse.gamePhase).toBe(GameEndTypes.ONGOING);
+        });
+    
+        it("Test Attack and Passive", async () => {
+            const aTurn = buildPlayerTurn(6, 1);
+            const bTurn = buildPlayerTurn(18, 0);
+            const turnResponse = await game.completeTurn(aTurn, bTurn)
+            expect(turnResponse.gameState.player1.playerStats.health).toBe(100);
+            expect(turnResponse.gameState.player2.playerStats.health).toBe(100 - 12);
+            expect(turnResponse.gameState.player1.playerStats.mana).toBe(9)
+            expect(turnResponse.gameState.player2.playerStats.mana).toBe(12)
+            expect(turnResponse.gamePhase).toBe(GameEndTypes.ONGOING);
+        });
+    
+        it("Test Block and Block", async () => {
+            const aTurn = buildPlayerTurn(7, 1);
+            const bTurn = buildPlayerTurn(7, 1);
+            const turnResponse = await game.completeTurn(aTurn, bTurn)
+            expect(turnResponse.gameState.player1.playerStats.health).toBe(100);
+            expect(turnResponse.gameState.player2.playerStats.health).toBe(100);
+            expect(turnResponse.gameState.player1.playerStats.mana).toBe(9)
+            expect(turnResponse.gameState.player2.playerStats.mana).toBe(9)
+            expect(turnResponse.gamePhase).toBe(GameEndTypes.ONGOING);
+        });
+    
+        it("Test Passive and Passive", async () => {
+            const aTurn = buildPlayerTurn(18, 0);
+            const bTurn = buildPlayerTurn(18, 0);
+            const turnResponse = await game.completeTurn(aTurn, bTurn)
+            expect(turnResponse.gameState.player1.playerStats.health).toBe(100);
+            expect(turnResponse.gameState.player2.playerStats.health).toBe(100);
+            expect(turnResponse.gameState.player1.playerStats.mana).toBe(12)
+            expect(turnResponse.gameState.player2.playerStats.mana).toBe(12)
+            expect(turnResponse.gamePhase).toBe(GameEndTypes.ONGOING);
+        });
+    
+        it("Test Heal Works", async () => {
+            const aTurn = buildPlayerTurn(12, 1);
+            const bTurn = buildPlayerTurn(12, 2);
+            const turnResponse = await game.completeTurn(aTurn, bTurn)
+            expect(turnResponse.gameState.player1.playerStats.health).toBe(100 + 7);
+            expect(turnResponse.gameState.player2.playerStats.health).toBe(100 + 14);
+            expect(turnResponse.gameState.player1.playerStats.mana).toBe(9)
+            expect(turnResponse.gameState.player2.playerStats.mana).toBe(8)
+            expect(turnResponse.gamePhase).toBe(GameEndTypes.ONGOING);
+        });
+    
+    }) 
 })
+
 
 // Tests
 
@@ -122,12 +173,11 @@ describe("Basic tests", () => {
     // AvA 
     // AvB - overflow + no overflow
     // AvP
-    // BvA
     // BvB
     // BvP
     // PvP
-    // Heal works
-    // Recharge works
+    // Heal works 
+    // Recharge works (testing with passives)
     // Charged spells charge correctly
     // Spells that cannot be charged dont charge
 
