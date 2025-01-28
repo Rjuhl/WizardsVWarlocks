@@ -241,7 +241,6 @@ export class Game  {
         if (spellCost === 0) return 0;
         if (playerState.frozen) {
             if (spell.spellRole !== SpellRoles.RECHARGE) spellCost *= 2;
-            playerState.frozen = false;
         }
         manaSpent = (playerState.playerStats.mana >= manaSpent) ? manaSpent : playerState.playerStats.mana;
         manaSpent -= manaSpent % spellCost;
@@ -279,14 +278,20 @@ export class Game  {
         // get charge modifiers
         const player1ManaSpent = this.getManaSpent(player1Spell, player1Turn.manaSpent, this.gameState.player1);
         const player2ManaSpent = this.getManaSpent(player2Spell, player2Turn.manaSpent, this.gameState.player2);
-        const player1ChargeModifier = (player1Spell.manaCost === 0) ? 0 : Math.floor(player1ManaSpent / player1Spell.manaCost);
-        const player2ChargeModifier = (player2Spell.manaCost === 0) ? 0 : Math.floor(player2ManaSpent / player2Spell.manaCost);
+        const player1SpellCost = (this.gameState.player1.frozen) ? player1Spell.manaCost * 2 : player1Spell.manaCost;
+        const player2SpellCost = (this.gameState.player2.frozen) ? player2Spell.manaCost * 2 : player2Spell.manaCost;
+        const player1ChargeModifier = (player1SpellCost === 0) ? 0 : Math.floor(player1ManaSpent / player1SpellCost);
+        const player2ChargeModifier = (player2SpellCost === 0) ? 0 : Math.floor(player2ManaSpent / player2SpellCost);
         this.gameState.player1.playerStats.mana -= player1ManaSpent;
         this.gameState.player2.playerStats.mana -= player2ManaSpent;
 
         if (player1Spell.reselectSpells && player1ChargeModifier > 0 && player1Turn.newSpells) await this.spellReselect(player1Turn.newSpells, this.gameState.player1);
         if (player2Spell.reselectSpells && player2ChargeModifier > 0 && player2Turn.newSpells) await this.spellReselect(player2Turn.newSpells, this.gameState.player2);
         
+        // Unfreeze players
+        this.gameState.player1.frozen = false;
+        this.gameState.player2.frozen = false;
+
         // resolve spell
         const outcome = this.resolveSpell(
             player1Spell,
