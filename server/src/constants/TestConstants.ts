@@ -19,7 +19,8 @@ export const InitSpellRolls = async () => {
     };
 
     // Additional roll values to add [NEED CHANGED MANUALLY IF UPDATED]
-    SPELL_ROLL["IGNITED"] = 7
-    SPELL_ROLL["SELF_INFLICTED_DAMAGE"] = 7
+    SPELL_ROLL["IGNITED"] = 7;
+    SPELL_ROLL["SELF_INFLICTED_DAMAGE"] = 7;
+    SPELL_ROLL["BLOCK_MODIFER_AMOUNT"] = 4;
     return SPELL_ROLL;
 };

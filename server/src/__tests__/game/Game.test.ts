@@ -418,50 +418,67 @@ describe("Game Test", () => {
                 6, 16], GameEndTypes.ONGOING);
         });
 
-        // it("Correct Modifers Apply/Persist", async () => {
-        //     await game.completeTurn(buildPlayerTurn(Spells.FORTIFY_ATTACK, 1), buildPlayerTurn(Spells.RECHARGE, 0));
-        //     await game.completeTurn(buildPlayerTurn(Spells.FIRE_RUNE, 1), buildPlayerTurn(Spells.RECHARGE, 0));
-        //     await game.completeTurn(buildPlayerTurn(Spells.WATER_JET, 1), buildPlayerTurn(Spells.RECHARGE, 0));
-        //     const aTurn = buildPlayerTurn(Spells.DRACONIC_BREATH, 2);
-        //     const bTurn = buildPlayerTurn(Spells.RECHARGE, 0);
-        //     const turnResponse = await game.completeTurn(aTurn, bTurn);
-        //     runBasicTests(turnResponse, [100, 100-57, 6, 16], GameEndTypes.ONGOING);
-        // });
+        it("Correct Modifers Apply/Persist", async () => {
+            await game.completeTurn(buildPlayerTurn(Spells.FORTIFY_ATTACK, 1), buildPlayerTurn(Spells.RECHARGE, 0));
+            await game.completeTurn(buildPlayerTurn(Spells.FIRE_RUNE, 1), buildPlayerTurn(Spells.RECHARGE, 0));
+            await game.completeTurn(buildPlayerTurn(Spells.WATER_JET, 2), buildPlayerTurn(Spells.RECHARGE, 0));
+
+            const aTurn = buildPlayerTurn(Spells.DRACONIC_BREATH, 2);
+            const bTurn = buildPlayerTurn(Spells.RECHARGE, 0);
+            const turnResponse = await game.completeTurn(aTurn, bTurn);
+            runBasicTests(turnResponse, [
+                100, 
+                100 - Math.floor(2 * SPELL_ROLL.WATER_JET * 1.5) - Math.floor(2 * SPELL_ROLL.DRACONIC_BREATH * 1.25), 
+                4, 18], GameEndTypes.ONGOING);
+        });
+
+        it("Special Blocks Work", async () => {
+            const aTurn = buildPlayerTurn(Spells.HEAVENLY_LIGHTNING_STRIKE, 4);
+            const bTurn = buildPlayerTurn(Spells.FIRE_FIELD, 2);
+            const turnResponse = await game.completeTurn(aTurn, bTurn);
+            runBasicTests(turnResponse, [
+                100, 
+                100 - Math.floor(Math.floor((SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE * 1.4) - 2 * (SPELL_ROLL.FIRE_FIELD + SPELL_ROLL.BLOCK_MODIFER_AMOUNT)) / 2), 
+                6, 8], GameEndTypes.ONGOING);
+        });
     });
-})
 
+    describe("Win Condition Tests", () => {
+        let game: Game;
+        beforeEach(() => {
+            const player1State = buildPlayerState(
+                'player_a', 'password',
+                12, 10, 1, 0
+            );
+            const player2State = buildPlayerState(
+                'player_b', 'password',
+                12, 10, 1, 0
+            );
+            game = new Game({
+                player1: player1State,
+                player2: player2State
+            });
+        });
 
-// Tests
+        it("Player 1 Can Win", async () => {
+            const aTurn = buildPlayerTurn(Spells.MAGIC_MISSLE, 1);
+            const bTurn = buildPlayerTurn(Spells.RECHARGE, 0);
+            const turnResponse = await game.completeTurn(aTurn, bTurn);
+            expect(turnResponse.gamePhase).toBe(GameEndTypes.PLAYER_1_WINS);
+        });
 
-// Basic Tests
-    // AvA 
-    // AvB - overflow + no overflow
-    // AvP
-    // BvB
-    // BvP
-    // PvP
-    // Heal works 
-    // Recharge works (testing with passives)
-    // Charged spells charge correctly
-    // Spells that cannot be charged dont charge
+        it("Player 2 Can Win", async () => {
+            const aTurn = buildPlayerTurn(Spells.RECHARGE, 0);
+            const bTurn = buildPlayerTurn(Spells.MAGIC_MISSLE, 1);
+            const turnResponse = await game.completeTurn(aTurn, bTurn);
+            expect(turnResponse.gamePhase).toBe(GameEndTypes.PLAYER_2_WINS);
+        });
 
-// Status work
-    // First Strike Works
-    // Ignited works
-    // Freeze works
-    // Energy steal works
-    // Self inflicted damage works
-    // Negate block overflow works
-    // Negate fire damage works
-
-// Modfier Tests
-    // Basic modifers work
-    // Modifiers stack
-    // Correct modifers persist
-    // Modifers effect the proper type
-    // Special blocks work
-
-// Win Conditions
-    // Player 1 wins
-    // Player 2 wins
-    // Tie
+        it("Ties Can Happen", async () => {
+            const aTurn = buildPlayerTurn(Spells.MAGIC_MISSLE, 1);
+            const bTurn = buildPlayerTurn(Spells.MAGIC_MISSLE, 1);
+            const turnResponse = await game.completeTurn(aTurn, bTurn);
+            expect(turnResponse.gamePhase).toBe(GameEndTypes.TIE);
+        });
+    });
+});
