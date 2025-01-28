@@ -36,7 +36,7 @@ export class Game  {
         return isPlayer1Alive ? GameEndTypes.PLAYER_1_WINS : GameEndTypes.PLAYER_2_WINS;
     }
 
-    private makeRoll(numRolls: number, die: number, base: number) {
+    public makeRoll(numRolls: number, die: number, base: number) {
         let amount = base;
         for (let i = 0; i < numRolls; i++) amount += Math.floor(Math.random() * die);
         return amount;
@@ -142,7 +142,7 @@ export class Game  {
             this.gameState.player1.playerStats.health -= spellDamage;
             player2Damage += spellDamage
         }   
-        
+
         return [player1Damage, player2Damage]
     }
 
@@ -237,9 +237,8 @@ export class Game  {
     }
 
     private getManaSpent(spell: ISpell, manaSpent: number, playerState: IPLayerState) {
-        //NOTE MANA COSTS CAN BE 0. WE NEED TO ACCOUT FOR THIS
-
         let spellCost = spell.manaCost;
+        if (spellCost === 0) return 0;
         if (playerState.frozen) {
             if (spell.spellRole !== SpellRoles.RECHARGE) spellCost *= 2;
             playerState.frozen = false;
@@ -254,7 +253,7 @@ export class Game  {
         if (spellsOwned) {
             let isValid = true;
             for (const spell of newSpells) {
-                if(!(spell in spellsOwned)){
+                if(!(spellsOwned.includes(spell))){
                     isValid = false;
                     break;
                 }
@@ -273,10 +272,9 @@ export class Game  {
     }
 
     public async completeTurn(player1Turn: IPlayerTurn, player2Turn: IPlayerTurn): Promise<ICompleteTurnResponse> {
-        
         //Get Spells
-        const player1Spell = (player1Turn.spellId in this.gameState.player1.spells) ? await this.spellFactory.getSpell(player1Turn.spellId) : new Spell();
-        const player2Spell = (player2Turn.spellId in this.gameState.player2.spells) ? await this.spellFactory.getSpell(player2Turn.spellId) : new Spell();
+        const player1Spell = (this.gameState.player1.spells.includes(player1Turn.spellId)) ? await this.spellFactory.getSpell(player1Turn.spellId) : new Spell();
+        const player2Spell = (this.gameState.player2.spells.includes(player2Turn.spellId)) ? await this.spellFactory.getSpell(player2Turn.spellId) : new Spell();
 
         // get charge modifiers
         const player1ManaSpent = this.getManaSpent(player1Spell, player1Turn.manaSpent, this.gameState.player1);
@@ -288,7 +286,7 @@ export class Game  {
 
         if (player1Spell.reselectSpells && player1ChargeModifier > 0 && player1Turn.newSpells) await this.spellReselect(player1Turn.newSpells, this.gameState.player1);
         if (player2Spell.reselectSpells && player2ChargeModifier > 0 && player2Turn.newSpells) await this.spellReselect(player2Turn.newSpells, this.gameState.player2);
-
+        
         // resolve spell
         const outcome = this.resolveSpell(
             player1Spell,

@@ -10,6 +10,7 @@ export class SpellFactory {
         this.spellSchema = schemas.Spells
     }
 
+    // THIS CAN BE FACTORED OUT
     private getType(spellClass: number) {
         switch (spellClass) {
             case 0:
@@ -28,6 +29,7 @@ export class SpellFactory {
         }
     }
 
+    // THIS CAN BE FACTORED OUT
     private getRole(spellRole: number) {
         switch(spellRole) {
             case 0:
@@ -61,28 +63,29 @@ export class SpellFactory {
     public async getSpell(spellId: number) {
         const spellData = await this.getSpellData(spellId)
         const spell = new Spell()
-        if (this.getRole(spellData.class) === SpellRoles.ATTACK) {
+
+        if (this.getRole(spellData.type) === SpellRoles.ATTACK) {
             spell.setDamage(
                 spellData.abilityBase,
                 spellData.abilityNumDie,
                 spellData.abilityDie
             )
         }
-        if (this.getRole(spellData.class) === SpellRoles.DEFENSE) {
+        if (this.getRole(spellData.type) === SpellRoles.DEFENSE) {
             spell.setDefense(
                 spellData.abilityBase,
                 spellData.abilityNumDie,
                 spellData.abilityDie
             )
         }
-        if (this.getRole(spellData.class) === SpellRoles.HEALING) {
+        if (this.getRole(spellData.type) === SpellRoles.HEALING) {
             spell.setHealing(
                 spellData.abilityBase,
                 spellData.abilityNumDie,
                 spellData.abilityDie
             )
         }
-        if (this.getRole(spellData.class) === SpellRoles.RECHARGE) {
+        if (this.getRole(spellData.type) === SpellRoles.RECHARGE) {
             spell.setManaRecharge(
                 spellData.abilityBase,
                 spellData.abilityNumDie,
