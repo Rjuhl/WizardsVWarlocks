@@ -1,4 +1,5 @@
 /node_modules
 /dist
 .env
-TestConstants.ts
+/constants/TestEnv.ts
+TestEnv.ts

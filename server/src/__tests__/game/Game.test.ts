@@ -5,7 +5,8 @@ import { Game } from '../../game/Game';
 import { IBasicStats } from "../../resources/interfaces/game/IBasicStats";
 import { GameEndTypes } from "../../resources/types/GameEndTypes";
 import mongoose, { ConnectOptions } from 'mongoose';
-import { DB_URI, InitSpellRolls, DynamicObject } from "../../constants/TestConstants";
+import { DB_URI } from "../../constants/TestEnv";
+import {InitSpellRolls, DynamicObject } from "../../constants/TestConstants";
 import { ICompleteTurnResponse } from "../../resources/interfaces/game/ICompleteTurnResponse";
 import { Spells } from "../../constants/Spells";
 
