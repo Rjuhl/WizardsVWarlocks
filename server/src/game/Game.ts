@@ -55,14 +55,12 @@ export class Game  {
 
     private applyActiveModifiers(player: IPLayerState, spell: ISpell, chargedModifier: number) {
         let modifier = chargedModifier;
-
         player.modifiers
         .filter((abilityModifer) => abilityModifer.applyCondition(spell))
         .forEach((abilityModifer) => modifier *= abilityModifer.multiplier);
         player.modifiers = player.modifiers
         .filter((abilityModifer) => !abilityModifer.deleteCondition(spell));
 
-        if (player.playerStats.classType === spell.spellClass) modifier *= player.playerStats.classMultiplier;
         return modifier;
     }
 
@@ -91,13 +89,13 @@ export class Game  {
             defendingDie.die,
             defendingDie.base
         );
-        if (defendingSpell.spellRole === SpellRoles.DEFENSE) defendingRoll *= this.applyActiveModifiers(defendingPlayer, defendingSpell, defendingChargedModifier);
-
-        // Check if block is extra effective
-        if (defendingSpell.hasBlockModifer && defendingSpell.blockModifierType === attackingSpell.spellClass) defendingRoll += (4 * defendingChargedModifier);
-
         if (defendingSpell.spellRole === SpellRoles.DEFENSE) {
-            attackRoll -= defendingRoll
+            defendingRoll *= this.applyActiveModifiers(defendingPlayer, defendingSpell, defendingChargedModifier);
+            
+            // Check if block is extra effective
+            if (defendingSpell.hasBlockModifer && defendingSpell.blockModifierType === attackingSpell.spellClass) defendingRoll += (4 * defendingChargedModifier);
+
+            attackRoll -= Math.floor(defendingRoll);
             if (!attackingSpell.negateBlockOverflowModifier) attackRoll = Math.floor(attackRoll / 2);
         }
 
@@ -118,27 +116,27 @@ export class Game  {
         let player2Damage = 0
 
         if (condition1) {
-            const spellDamage = this.resolveSpellDamage(
+            const spellDamage = Math.floor(this.resolveSpellDamage(
                 this.gameState.player1,
                 spell1,
                 chargeModifier1,
                 this.gameState.player2,
                 spell2,
                 chargeModifier2
-            );
+            ));
             this.gameState.player2.playerStats.health -= spellDamage;
             player1Damage += spellDamage
         }
 
         if (condition2){
-            const spellDamage = this.resolveSpellDamage(
+            const spellDamage = Math.floor(this.resolveSpellDamage(
                 this.gameState.player2,
                 spell2,
                 chargeModifier2,
                 this.gameState.player1,
                 spell1,
                 chargeModifier1
-            );
+            ));
             this.gameState.player1.playerStats.health -= spellDamage;
             player2Damage += spellDamage
         }   

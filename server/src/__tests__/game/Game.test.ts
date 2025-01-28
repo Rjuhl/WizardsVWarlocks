@@ -5,7 +5,7 @@ import { Game } from '../../game/Game';
 import { IBasicStats } from "../../resources/interfaces/game/IBasicStats";
 import { GameEndTypes } from "../../resources/types/GameEndTypes";
 import mongoose, { ConnectOptions } from 'mongoose';
-import { DB_URI } from "../../constants/TestConstants";
+import { DB_URI, InitSpellRolls, DynamicObject } from "../../constants/TestConstants";
 import { ICompleteTurnResponse } from "../../resources/interfaces/game/ICompleteTurnResponse";
 import { Spells } from "../../constants/Spells";
 
@@ -14,7 +14,7 @@ jest.spyOn(Game.prototype, 'makeRoll').mockImplementation(
     (numRolls: number, die: number, base: number) => numRolls + die + base
 );
 
-const TOTAL_SPELLS = 22
+const TOTAL_SPELLS = Object.keys(Spells).length / 2;
 const buildPlayerTurn = (
     spellId: number,
     manaSpent: number,
@@ -59,11 +59,13 @@ const buildPlayerState = (
     return playerState
 };
 describe("Game Test", () => {
+    let SPELL_ROLL: DynamicObject;
     beforeAll(async () => {
         mongoose
         .connect(DB_URI)
         .then(() => console.log('Connected to Database'))
         .catch((err) => console.log(err));
+        SPELL_ROLL = await InitSpellRolls();
     });
 
     afterAll(async () => {
@@ -99,7 +101,10 @@ describe("Game Test", () => {
             const aTurn = buildPlayerTurn(Spells.MAGIC_MISSLE, 1);
             const bTurn = buildPlayerTurn(Spells.MAGIC_MISSLE, 1);
             const turnResponse = await game.completeTurn(aTurn, bTurn);
-            runBasicTests(turnResponse, [100-12, 100-12, 9, 9], GameEndTypes.ONGOING)
+            runBasicTests(turnResponse, [
+                100 - SPELL_ROLL.MAGIC_MISSLE, 
+                100 - SPELL_ROLL.MAGIC_MISSLE, 
+                9, 9], GameEndTypes.ONGOING)
         });
     
         it("Test Attack and Block - no damage", async () => {
@@ -317,7 +322,7 @@ describe("Game Test", () => {
         beforeEach(() => {
             const player1State = buildPlayerState(
                 'player_a', 'password',
-                100, 10, 1.4, 0
+                100, 10, 1.4, 2
             );
             const player2State = buildPlayerState(
                 'player_b', 'password',
@@ -327,6 +332,41 @@ describe("Game Test", () => {
                 player1: player1State,
                 player2: player2State
             });
+        });
+
+        it("Character Modifiers Work on Attack", async () => {
+            const aTurn = buildPlayerTurn(Spells.LIGHTNING_BOLT, 2);
+            const bTurn = buildPlayerTurn(Spells.WATER_JET, 2);
+            let turnResponse = await game.completeTurn(aTurn, bTurn);
+            runBasicTests(turnResponse, [100-19, 100-30, 8, 8], GameEndTypes.ONGOING);
+            turnResponse = await game.completeTurn(aTurn, bTurn);
+            runBasicTests(turnResponse, [100-19-19, 100-30-30, 6, 6], GameEndTypes.ONGOING);
+        })
+
+        it("Character Modifiers Work on Defense", async () => {
+            const aTurn = buildPlayerTurn(Spells.MAGIC_MISSLE, 2);
+            const bTurn = buildPlayerTurn(Spells.WATER_FIELD, 1);
+            const turnResponse = await game.completeTurn(aTurn, bTurn);
+            runBasicTests(turnResponse, [100, 100-4, 8, 9], GameEndTypes.ONGOING);
+        });
+
+        it("Modifiers stack", async () => {
+            await game.completeTurn(buildPlayerTurn(Spells.FORTIFY_ATTACK, 1), buildPlayerTurn(Spells.RECHARGE, 0));
+            await game.completeTurn(buildPlayerTurn(Spells.LIGHTNING_RUNE, 1), buildPlayerTurn(Spells.RECHARGE, 0));
+            const aTurn = buildPlayerTurn(Spells.LIGHTNING_BOLT, 2);
+            const bTurn = buildPlayerTurn(Spells.RECHARGE, 0);
+            const turnResponse = await game.completeTurn(aTurn, bTurn);
+            runBasicTests(turnResponse, [100, 100-57, 6, 16], GameEndTypes.ONGOING);
+        });
+
+        it("Correct Modifers Apply/Persist", async () => {
+            await game.completeTurn(buildPlayerTurn(Spells.FORTIFY_ATTACK, 1), buildPlayerTurn(Spells.RECHARGE, 0));
+            await game.completeTurn(buildPlayerTurn(Spells.FIRE_RUNE, 1), buildPlayerTurn(Spells.RECHARGE, 0));
+            await game.completeTurn(buildPlayerTurn(Spells.WATER_JET, 1), buildPlayerTurn(Spells.RECHARGE, 0));
+            const aTurn = buildPlayerTurn(Spells.DRACONIC_BREATH, 2);
+            const bTurn = buildPlayerTurn(Spells.RECHARGE, 0);
+            const turnResponse = await game.completeTurn(aTurn, bTurn);
+            runBasicTests(turnResponse, [100, 100-57, 6, 16], GameEndTypes.ONGOING);
         });
     });
 })
@@ -359,7 +399,6 @@ describe("Game Test", () => {
     // Basic modifers work
     // Modifiers stack
     // Correct modifers persist
-    // Correct modifers remove themselves
     // Modifers effect the proper type
     // Special blocks work
 
