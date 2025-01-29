@@ -67,6 +67,21 @@ export class GameRoom {
         this.gameLedger.push(this.game.getGameState());
     }
 
+    public getLedger() {
+        return this.gameLedger;
+    }
+
+    public gameOver() {
+        const lastState = this.gameLedger[this.gameLedger.length - 1];
+        return (lastState.player1.playerStats.health <= 0 || lastState.player2.playerStats.health <= 0);
+    }
+
+    public getTimeOutWinner() {
+        if (!this.turn[this.player1] && !this.turn[this.player2]) return 'tie';
+        if (this.turn[this.player1]) return this.player1;
+        return this.player2;
+    }
+
     public async takeTurn(player: string, turn: IPlayerTurn): Promise<Array<IPlayerTurnResponse> | null > {
         this.turn[player] = turn;
         if(!this.game) return null;
@@ -82,6 +97,10 @@ export class GameRoom {
 
             this.gameLedger.push(turnResponse.gameState);
             const turnData = this.getTurnDamageAndMana();
+
+            // Clear turn array
+            this.turn = {};
+
             return [
                 {
                     player: this.player1,

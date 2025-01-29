@@ -3,9 +3,12 @@ import { IRooms } from '../resources/interfaces/sockets/IRooms';
 import { ISocketUser } from '../resources/interfaces/sockets/ISocketUser';
 import { IChallenges } from '../resources/interfaces/sockets/IChallenges';
 import { IOnlineUsers } from '../resources/interfaces/sockets/IOnlineUsers';
+import { Timer } from './Timer';
+import { randomUUID } from 'crypto';
 
 export default function socketHandler(io: Server): void {
     const rooms: IRooms = {};
+    const timer: Record<string, Timer> = {};
     const onlineUsers: IOnlineUsers = {};
     const socketToUser: ISocketUser = {};
     const UserToSocket: ISocketUser = {};
@@ -101,5 +104,12 @@ export default function socketHandler(io: Server): void {
                 io.emit('onlineUserListUpdate', Object.keys(onlineUsers));
             }
         });
+
+        // Handles Game Turns 
+        
+        // Timer example 
+        // const timerName = randomUUID()
+        // const timer = Timer(timerName)
+        // timers[timerName] = timer
     });
 }
