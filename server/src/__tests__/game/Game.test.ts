@@ -466,7 +466,7 @@ describe("Game Test", () => {
             const turnResponse = await game.completeTurn(aTurn, bTurn);
             expect(turnResponse.gamePhase).toBe(GameEndTypes.PLAYER_1_WINS);
         });
-
+   
         it("Player 2 Can Win", async () => {
             const aTurn = buildPlayerTurn(Spells.RECHARGE, 0);
             const bTurn = buildPlayerTurn(Spells.MAGIC_MISSLE, 1);

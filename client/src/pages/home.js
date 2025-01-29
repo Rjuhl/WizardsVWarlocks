@@ -20,6 +20,7 @@ export default function Home() {
     const [challenge, setChallenge] = useState('None')
     const [challengeMessage, setChallengeMessage] = useState(null)
     const [onlineList, setOnlineList] = useState([])
+    const [challengers, setChallengers] = useState([]);
     const classType = userInfo.class
     const userName = userInfo.username
     const admin = userInfo.admin || false
@@ -27,12 +28,6 @@ export default function Home() {
     const converter = new Converter()
     
     useOnlineStatus();
-
-    socket.on('onlineUserListUpdate', onlineUserList => {
-        console.log(onlineUserList)
-        setOnlineList(onlineUserList)
-    })
-
     useEffect(() => {
 
         // Listen for the online user list updates
@@ -41,11 +36,21 @@ export default function Home() {
             setOnlineList(onlineUserList);
         });
 
+        //Listen for challenges 
+        socket.on('challengersUpdate', challengersList => {
+            console.log("Challengers List", challengersList);
+            setChallengers(challengersList);
+        })
+
+        socket.emit('getUserList');
+        socket.emit('getChallengersList', userInfo.username);
+
         // Clean up event listeners on unmount
         return () => {
             socket.off('onlineUserListUpdate');
+            socket.off('challengersUpdate');
         }
-    }, [onlineList])
+    }, [])
 
     const adminPage = () => {
         if (admin) {
@@ -58,6 +63,9 @@ export default function Home() {
 
     const updateChallenge = (username) => {
         // Emit Challenge
+        if (challengeMessage !== 'None') socket.emit('cancelChallenge', userInfo.username, challengeMessage);
+        socket.emit('challenge', userInfo.username, username);
+
         setChallenge(username)
         const message = username === 'None' ? null : username
         setChallengeMessage(message)
@@ -111,7 +119,24 @@ export default function Home() {
                         ))}
                     </div>
                 </div>
+
+                <div className="userListSection">
+                    <h2>Challengers</h2>
+                    <div className="userList">
+                        {challengers.map((user, index) => (
+                            <button
+                                key={user}
+                                className={`userRow ${index % 2 === 0 ? 'evenRow' : 'oddRow'}`}
+                                onClick={() => updateChallenge(user)}
+                            >
+                                {user}
+                            </button>
+                        ))}
+                    </div>
+                </div>
             </div>
         </>
     );
 }
+
+
