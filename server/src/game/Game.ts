@@ -265,7 +265,12 @@ export class Game  {
     public getPlayerState(playerId: string) {
         if (this.gameState.player1.playerId === playerId) return this.gameState.player1;
         if (this.gameState.player2.playerId === playerId) return this.gameState.player2;
-        return null;
+        console.log('Get Plauer State Used Incorrectly');
+        return this.gameState.player1;
+    }
+
+    public getGameState(): IGameState {
+        return this.gameState;
     }
 
     public async completeTurn(player1Turn: IPlayerTurn, player2Turn: IPlayerTurn): Promise<ICompleteTurnResponse> {
