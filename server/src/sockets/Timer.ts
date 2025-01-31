@@ -11,7 +11,7 @@ export class Timer {
     private player2Username: string;
     private player2SocketId: string;
     private io: any;
-    private duration: number = 1000 * 60 * 5;
+    private duration: number = 1000 * 60 * 5 * 100;
     private prevLedgerSize = 0;
 
     constructor(
@@ -38,7 +38,7 @@ export class Timer {
         parent[id] = this;
     }
 
-    private deleteSelf() {
+    public deleteSelf() {
         clearInterval(this.intervalId)
         delete this.parent[this.id];
     }

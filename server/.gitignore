@@ -3,3 +3,4 @@
 .env
 /constants/TestEnv.ts
 TestEnv.ts
+package-lock.json

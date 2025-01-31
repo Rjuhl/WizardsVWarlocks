@@ -5,14 +5,16 @@ import { IChallenges } from '../resources/interfaces/sockets/IChallenges';
 import { IOnlineUsers } from '../resources/interfaces/sockets/IOnlineUsers';
 import { Timer } from './Timer';
 import { randomUUID } from 'crypto';
+import { GameRoom } from './GameRoom';
 
 export default function socketHandler(io: Server): void {
     const rooms: IRooms = {};
-    const timer: Record<string, Timer> = {};
+    const timers: Record<string, Timer> = {};
     const onlineUsers: IOnlineUsers = {};
     const socketToUser: ISocketUser = {};
-    const UserToSocket: ISocketUser = {};
+    const userToSocket: ISocketUser = {};
     const challenges: IChallenges = {};
+    const passwords: {[username: string]: string} = {};
     const receivedChallenges: IChallenges = {}; // Currently unused 
 
     const getChallengersList = (username: string) => {
@@ -33,11 +35,12 @@ export default function socketHandler(io: Server): void {
         });
 
         // User comes online
-        socket.on('userOnline', (username: string) => {
+        socket.on('userOnline', (username: string, password: string) => {
             console.log(`${username} connected`);
             onlineUsers[username] = true;
             socketToUser[socket.id] = username;
-            UserToSocket[username] = socket.id;
+            userToSocket[username] = socket.id;
+            passwords[username] = password;
             io.emit('onlineUserListUpdate', Object.keys(onlineUsers));
         });
 
@@ -46,7 +49,8 @@ export default function socketHandler(io: Server): void {
             console.log(`${username} disconnected`);
             delete onlineUsers[username];
             delete socketToUser[socket.id];
-            delete UserToSocket[username];
+            delete userToSocket[username];
+            delete passwords[username];
             io.emit('onlineUserListUpdate', Object.keys(onlineUsers));
         });
 
@@ -66,14 +70,33 @@ export default function socketHandler(io: Server): void {
                 console.log("Challenge begins");
                 // Create a room and notify both users
                 const roomName = `room-${challenger}-${foe}`;
-                io.to(UserToSocket[challenger]).emit("matchRoom", roomName);
-                io.to(UserToSocket[foe]).emit("matchRoom", roomName);
+                io.to(userToSocket[challenger]).emit("matchRoom", roomName);
+                io.to(userToSocket[foe]).emit("matchRoom", roomName);
+                rooms[roomName] = new GameRoom(
+                    challenger,
+                    passwords[challenger],
+                    foe,
+                    passwords[foe]
+                );
+                const timer = new Timer(
+                    roomName,
+                    timers,
+                    rooms,
+                    roomName,
+                    challenger,
+                    userToSocket[challenger],
+                    foe,
+                    userToSocket[foe],
+                    io
+                )
+                timers[roomName] = timer;
+                timer.start();
                 console.log(`Room ${roomName} created between ${challenger} and ${foe}`);
             } else {
                 // Notify the foe of a challenge
                 if (onlineUsers[foe]) {
                     console.log('Notify foe of challenge');
-                    socket.to(UserToSocket[foe]).emit("challengersUpdate", getChallengersList(foe));
+                    socket.to(userToSocket[foe]).emit("challengersUpdate", getChallengersList(foe));
                     console.log(`${challenger} challenged ${foe}`);
                 } else {
                     // If user challenged is offline remove the challenge
@@ -88,7 +111,7 @@ export default function socketHandler(io: Server): void {
         socket.on('cancelChallenge', (challenger: string, foe: string) => {
             if (challenges[foe]) {
                 delete challenges[foe][challenger];
-                socket.to(UserToSocket[foe]).emit("challengersUpdate", getChallengersList(foe));
+                socket.to(userToSocket[foe]).emit("challengersUpdate", getChallengersList(foe));
                 console.log(`${challenger} canceled challenge to ${foe}`);
             }
         });
@@ -100,16 +123,41 @@ export default function socketHandler(io: Server): void {
                 console.log(`${username} disconnected`);
                 delete onlineUsers[username];
                 delete socketToUser[socket.id];
-                delete UserToSocket[username];
+                delete userToSocket[username];
+                delete passwords[username];
                 io.emit('onlineUserListUpdate', Object.keys(onlineUsers));
             }
         });
 
         // Handles Game Turns 
-        
-        // Timer example 
-        // const timerName = randomUUID()
-        // const timer = Timer(timerName)
-        // timers[timerName] = timer
+
+        socket.on('makeTurn', async (
+            username: string, 
+            gameRoom: string, 
+            spellId: number, 
+            manaSpent: number,
+            newSpells: Array<number> | null
+        ) => {
+            const playerTurn = {
+                spellId: spellId,
+                manaSpent: manaSpent,
+                newSpells: newSpells
+            }
+            if (rooms[gameRoom]) {
+                const turnResponse = await rooms[gameRoom].takeTurn(username, playerTurn);
+                if (turnResponse) {
+                    for (const playerResponse of turnResponse) {
+                        io.to(userToSocket[playerResponse.player]).emit('turnResult', playerResponse);
+                        if (playerResponse.winner) {
+                            io.to(userToSocket[playerResponse.player]).emit('winner', playerResponse.winner);
+                        }
+                    }
+                    if (turnResponse[0].winner) {
+                        delete rooms[gameRoom];
+                        timers[gameRoom].deleteSelf();
+                    }
+                }
+            }
+        })
     });
 }
