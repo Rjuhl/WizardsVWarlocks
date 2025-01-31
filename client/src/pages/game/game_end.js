@@ -15,7 +15,7 @@ export default function GameEnd() {
             height: "100vh",
             textAlign: "center"
         }}>
-            <h1 style={{ fontSize: "6rem", fontWeight: "bold" }}>{gameContext.winner}</h1>
+            <h1 className="celebration-header">{`${gameContext.winner} wins! 🎉`}</h1>
             <button className="shop-home-button" onClick={() => {setGameContext(undefined); navigate("/home");}}>Home </button>
         </div>
     );

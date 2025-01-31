@@ -7,7 +7,7 @@ export class AbilityMultiplier implements IAbilityMultiplier {
     public readonly multiplier: number
     public readonly type: SpellTypes
     public readonly role: SpellRoles
-    private removeAfterUse: boolean
+    public readonly removeAfterUse: boolean
     constructor(multiplier: number, type: SpellTypes, role: SpellRoles, removeAfterUse: boolean) {
         this.multiplier = multiplier
         this.type = type

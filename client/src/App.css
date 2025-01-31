@@ -770,3 +770,58 @@ html, body {
   width: 80%;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
+
+/* 🔥 Damage Header (Displays when taking damage) */
+.negative-header {
+  font-size: 28px; /* Slightly bigger for emphasis */
+  font-weight: 700; /* Bolder to indicate impact */
+  color: #ff3b3b; /* Bright red to indicate damage */
+  margin: 10px auto; /* Auto centers horizontally */
+  text-shadow: 2px 2px 5px rgba(255, 0, 0, 0.5); /* Soft red glow effect */
+  animation: shake 0.5s ease-in-out; /* Shake effect for impact */
+}
+
+/* 💚 Healing Header (Displays when gaining health) */
+.positive-header {
+  font-size: 28px; /* Same size as damage for balance */
+  font-weight: 700; /* Bold but not aggressive */
+  color: #28a745; /* Bright green to indicate healing */
+  margin: 10px auto; /* Auto centers horizontally */
+  text-shadow: 2px 2px 5px rgba(0, 255, 0, 0.5); /* Soft green glow effect */
+  animation: fadeIn 0.8s ease-in-out; /* Smooth fade-in effect */
+}
+
+/* 🎭 Shake Animation for Damage */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 80% { transform: translateX(-5px); }
+  40%, 60% { transform: translateX(5px); }
+}
+
+/* 🌟 Fade-In Animation for Healing */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+
+.celebration-header {
+  font-size: 6rem;
+  font-weight: bold;
+  text-align: center;
+  color: gold;
+  text-shadow: 4px 4px 10px rgba(255, 223, 0, 0.9), 6px 6px 15px rgba(255, 165, 0, 0.7);
+  animation: glow 1.5s infinite alternate, bounce 1.5s infinite ease-in-out;
+}
+
+/* 🎆 Glowing Effect */
+@keyframes glow {
+  0% { text-shadow: 4px 4px 10px rgba(255, 223, 0, 0.9); }
+  100% { text-shadow: 6px 6px 15px rgba(255, 165, 0, 1); }
+}
+
+/* 🎊 Bouncing Effect */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}

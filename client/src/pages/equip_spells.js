@@ -17,8 +17,7 @@ export default function EquipSpells(props) {
     const [removeButtonVisable, setRemoveButtonVisable] = useState(false)
     const [returnMessage, setReturnMessage] = useState('')
     const navigate = useNavigate()
-    const [inGameSpells, setInGameSpells] = useState(userInfo.activeSpells)
-
+    const [inGameSpells, setInGameSpells] = useState(gameContext.activeSpells)
 
     useOnlineStatus()
 
@@ -38,8 +37,7 @@ export default function EquipSpells(props) {
         }
 
         setSelectedOwnedSpell(null);
-        let newInGameSpells = inGameSpells;
-        newInGameSpells.push(spellId);
+        let newInGameSpells = [...inGameSpells, spellId];
         gameContext.newSpells = newInGameSpells;
         setInGameSpells(newInGameSpells);
         setGameContext(gameContext);

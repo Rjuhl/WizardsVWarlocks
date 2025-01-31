@@ -6,6 +6,7 @@ import { IPlayerTurn } from "../resources/interfaces/game/IPlayerTurn";
 import { IPlayerTurnResponse } from "../resources/interfaces/sockets/IPlayerTurnResponse";
 import { ITurn } from "../resources/interfaces/sockets/ITurn";
 import { GameEndTypes } from "../resources/types/GameEndTypes";
+import cloneDeep from "lodash/cloneDeep";
 
 export class GameRoom {
     private player1: string; 
@@ -65,7 +66,7 @@ export class GameRoom {
             this.player2,
             this.player2Password
         )
-        this.gameLedger.push(this.game.getGameState());
+        this.gameLedger.push(cloneDeep(this.game.getGameState()));
     }
 
     public getLedger() {
@@ -96,9 +97,12 @@ export class GameRoom {
                 if (turnResponse.gamePhase === GameEndTypes.TIE) winner = 'tie';
                 else winner = (turnResponse.gamePhase === GameEndTypes.PLAYER_1_WINS) ? this.player1 : this.player2;
             };
-
-            this.gameLedger.push(turnResponse.gameState);
+            this.gameLedger.push(cloneDeep(turnResponse.gameState));
             const turnData = this.getTurnDamageAndMana();
+
+            const playerMoves: { [key: string]: number } = {};
+            playerMoves[this.player1] = this.turn[this.player1].spellId;
+            playerMoves[this.player2] = this.turn[this.player2].spellId;
 
             // Clear turn array
             this.turn = {};
@@ -111,7 +115,8 @@ export class GameRoom {
                     damageTaken: turnData.player1.damageTaken,
                     manaSpent: turnData.player1.manaSpent,
                     winner: winner,
-                    turn: this.turnCounter
+                    turn: this.turnCounter,
+                    playerMoves: playerMoves,
                 },
                 {
                     player: this.player2,
@@ -120,7 +125,8 @@ export class GameRoom {
                     damageTaken: turnData.player2.damageTaken,
                     manaSpent: turnData.player2.manaSpent,
                     winner: winner,
-                    turn: this.turnCounter
+                    turn: this.turnCounter,
+                    playerMoves: playerMoves,
                 }
             ]
 

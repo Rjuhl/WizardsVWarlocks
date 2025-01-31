@@ -9,6 +9,7 @@ import { GameEndTypes } from "../resources/types/GameEndTypes";
 import { SpellRoles } from "../resources/types/SpellRoles";
 import { SpellTypes } from "../resources/types/SpellTypes";
 import { Spell } from "./Spell";
+import cloneDeep from "lodash/cloneDeep";
 
 const IGNITED_ROUNDS = 3;
 const MAX_MANA_GAIN = 8;
@@ -38,7 +39,7 @@ export class Game  {
 
     public makeRoll(numRolls: number, die: number, base: number) {
         let amount = base;
-        for (let i = 0; i < numRolls; i++) amount += Math.floor(Math.random() * die);
+        for (let i = 0; i < numRolls; i++) amount += Math.floor(Math.random() * die) + 1;
         return amount;
     }
     
@@ -184,11 +185,17 @@ export class Game  {
         if (spell1.modifier) this.gameState.player1.modifiers.push(spell1.modifier);
         if (spell2.modifier) this.gameState.player2.modifiers.push(spell2.modifier);
 
-        // Reveal Player spells NOTE NEED TO ALLOW PLAYER STATS TO BE VISABLE TOO
-        if (spell1.readsOpponent) this.gameState.player1.observedSpells = this.gameState.player2.spells
-        if (spell2.readsOpponent) this.gameState.player2.observedSpells = this.gameState.player1.spells
+        // Reveal Player spells and stats
+        if (spell1.readsOpponent) {
+            this.gameState.player1.observedSpells = cloneDeep(this.gameState.player2.spells);
+            this.gameState.player1.observedStats = cloneDeep(this.gameState.player2.playerStats);
+        };
+        if (spell2.readsOpponent) {
+            this.gameState.player2.observedSpells = cloneDeep(this.gameState.player1.spells);
+            this.gameState.player2.observedStats = cloneDeep(this.gameState.player1.playerStats);
+        };
 
-    }
+    };
 
     private resolveSpell(spell1: ISpell, chargeModifier1: number, spell2: ISpell, chargeModifier2: number) {
         // Deal ignited damage first
@@ -246,6 +253,7 @@ export class Game  {
     }
 
     private async spellReselect(newSpells: Array<number>, player: IPLayerState) {
+        console.log("Spell reselect called");
         const spellsOwned = (await schemas.Users.where({ username: player.playerId  }).findOne())?.spellsOwned;
         if (spellsOwned) {
             let isValid = true;
@@ -258,6 +266,8 @@ export class Game  {
 
             if (isValid) {
                 player.spells = newSpells;
+                console.log(newSpells);
+                console.log("New spells are valid and updated");
             }
         }
     }
@@ -265,7 +275,7 @@ export class Game  {
     public getPlayerState(playerId: string) {
         if (this.gameState.player1.playerId === playerId) return this.gameState.player1;
         if (this.gameState.player2.playerId === playerId) return this.gameState.player2;
-        console.log('Get Plauer State Used Incorrectly');
+        console.log('Get Player State Used Incorrectly');
         return this.gameState.player1;
     }
 
@@ -302,7 +312,7 @@ export class Game  {
             player2Spell,
             player2ChargeModifier
         );
-
+        
         return {
             "gameState": this.gameState,
             "gamePhase": outcome

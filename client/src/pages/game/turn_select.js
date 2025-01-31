@@ -22,9 +22,9 @@ export default function TurnSelect() {
     const SWAP_SPELL_ID = 15;
     const [userInfo, setUserInfo] = useContext(Context);
     const [gameContext, setGameContext] = useContext(GameContext);
-    const [round, setRound] = useState(0);
-    const [lastObserved, setLastObserved] = useState(round);
-    const [observedSpells, setObservedSpells] = useState(Array(gameContext.activeSpells.length).fill(-1));
+    const [round, setRound] = useState(gameContext.round);
+    const [lastObserved, setLastObserved] = useState(gameContext.lastObserved);
+    const [observedSpells, setObservedSpells] = useState(gameContext.observedSpells);
     const [spellEquiped, setSpellEquiped] = useState(-1);
     const [manaSpent, setManaSpent] = useState(0)
     const [slider, setSlider] = useState([1, 0, 10])
@@ -47,6 +47,8 @@ export default function TurnSelect() {
             gameContext.lastObserved = gameContext.round + 1
             setGameContext(gameContext)
         }
+
+        console.log(gameContext.newSpells)
 
         socket.emit("makeTurn",
             gameContext.username,
@@ -147,7 +149,7 @@ export default function TurnSelect() {
                 >
                     <h1 className="medium-header">Effects</h1>
                     {Boolean(gameContext.frozen) && <AcUnitIcon sx={{ fontSize: 50, color: "#00BFFF" }} />}
-                    {Boolean(gameContext.ignted) && <LocalFireDepartmentIcon sx={{ fontSize: 50, color: "#FF4500" }} />}
+                    {Boolean(gameContext.ignited) && <LocalFireDepartmentIcon sx={{ fontSize: 50, color: "#FF4500" }} />}
                 </Stack>
             </div>
 
