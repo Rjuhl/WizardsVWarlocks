@@ -8,4 +8,5 @@ export interface IPlayerTurnResponse {
     manaSpent: number,
     winner: string | null,
     turn: number,
+    playerMoves: {[player: string]: number}
 }

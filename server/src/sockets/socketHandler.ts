@@ -55,7 +55,7 @@ export default function socketHandler(io: Server): void {
         });
 
         // User challenges another user
-        socket.on('challenge', (challenger: string, foe: string) => {
+        socket.on('challenge', async (challenger: string, foe: string) => {
             console.log(`${challenger} challenged ${foe}`);
             // update challanges
             if (!challenges[foe]) challenges[foe] = {};
@@ -78,6 +78,7 @@ export default function socketHandler(io: Server): void {
                     foe,
                     passwords[foe]
                 );
+                await rooms[roomName].init();
                 const timer = new Timer(
                     roomName,
                     timers,
@@ -145,8 +146,10 @@ export default function socketHandler(io: Server): void {
             }
             if (rooms[gameRoom]) {
                 const turnResponse = await rooms[gameRoom].takeTurn(username, playerTurn);
+                console.log(`${username} made move in room: ${gameRoom}`);
                 if (turnResponse) {
                     for (const playerResponse of turnResponse) {
+                        console.log(`Emitting message to ${playerResponse.player} with socketid ${userToSocket[playerResponse.player]}`)
                         io.to(userToSocket[playerResponse.player]).emit('turnResult', playerResponse);
                         if (playerResponse.winner) {
                             io.to(userToSocket[playerResponse.player]).emit('winner', playerResponse.winner);

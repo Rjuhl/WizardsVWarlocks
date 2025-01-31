@@ -50,7 +50,7 @@ export default function Home() {
             const foeAvatar = await axios.get("http://localhost:4000/playerAvatar", params)
             .then(res => { return res.data})
             .catch(e => {console.log(e)});
-
+            const info =
 
             setGameContext({
                 ...userInfo,
@@ -59,6 +59,7 @@ export default function Home() {
                 observedSpells: Array(userInfo.activeSpells.length).fill(-1),
                 round: 0,
                 lastObserve: 0,
+                newSpells: null,
                 foeHealth: null,
                 foeMana: null,
                 winner: null,
