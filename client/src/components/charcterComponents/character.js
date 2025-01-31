@@ -9,6 +9,7 @@ export default function CharacterCanvas(props) {
     const black = { h: 0, s: 0, v: 0, a: 0 }
     const scale = props.scale || 1
     const canvasSize = Math.round(300 * scale)
+    const canvasId = props.canvasId || "characterCanvas";
 
     useEffect(() => {
         drawImage(wizardHat, props.hatHsva, 15 * scale, 10 * scale, 0.15 * scale)
@@ -49,7 +50,7 @@ export default function CharacterCanvas(props) {
         img.crossOrigin = "anonymous"
         img.src = src 
 
-        const canvas = document.getElementById("characterCanvas")
+        const canvas = document.getElementById(canvasId)
         const ctx = canvas.getContext("2d")
 
         img.onload = () => {
@@ -64,7 +65,7 @@ export default function CharacterCanvas(props) {
 
     return (
         <> 
-            <canvas id="characterCanvas" width={canvasSize} height={canvasSize}></canvas>
+            <canvas id={canvasId} width={canvasSize} height={canvasSize}></canvas>
         </>
     )
 }

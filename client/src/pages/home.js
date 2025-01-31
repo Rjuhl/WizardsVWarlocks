@@ -1,18 +1,20 @@
-import { useState, useEffect, useContext } from "react"
+import { useState, useEffect, useContext, useReducer } from "react"
 import { useNavigate } from 'react-router-dom';
 import Context from '../components/providers/context.js'
 import CharacterCanvas from "../components/charcterComponents/character"
-import rgbtohsv from "../utils/rgbtohsv";
+import GameContext from "../components/providers/gameContext.js";
 import Converter from "../utils/converter";
 import useOnlineStatus from "../hooks/onlineStatus.js"
 import socket from '../socket'
+import axios from 'axios'
 
 // const [hatHsva, setHatHsva] = useState({ h: 0, s: 0, v: 68, a: 1 });
 // const [staffHsva, setStaffHsva] = useState({ h: 0, s: 0, v: 68, a: 1 });
 // <CharacterCanvas staffHsva={staffHsva} setStaffHsva={setStaffHsva} hatHsva={hatHsva}  setHatHsva={setHatHsva}/>
 
 export default function Home() {
-    const [userInfo, setUserInfo] = useContext(Context)
+    const [userInfo, setUserInfo] = useContext(Context);
+    const [gameContext, setGameContext] = useContext(GameContext);
     const [hatColor, setHatColor] = useState({h: userInfo.hatColor[0], s: userInfo.hatColor[1], v: userInfo.hatColor[2]})
     const [money, setMoney] = useState(userInfo.money)
     const [staffColor, setStaffColor] = useState({h: userInfo.staffColor[0], s: userInfo.staffColor[1], v: userInfo.staffColor[2]})
@@ -42,6 +44,39 @@ export default function Home() {
             setChallengers(challengersList);
         })
 
+        // Listen for match and room number
+        socket.on("matchRoom", async (roomNumber) => {
+            const params = {params: {username: challengeMessage}}; 
+            const foeAvatar = await axios.get("http://localhost:4000/playerAvatar", params)
+            .then(res => { return res.data})
+            .catch(e => {console.log(e)});
+
+
+            setGameContext({
+                ...userInfo,
+                matchRoomNumber: roomNumber,
+                foeAvatar: foeAvatar,
+                observedSpells: Array(userInfo.activeSpells.length).fill(-1),
+                round: 0,
+                lastObserve: 0,
+                foeHealth: null,
+                foeMana: null,
+                winner: null,
+                frozen: false,
+                ignited: false,
+                modifiers: [
+                    {
+                        modifier: userInfo.classMultiplier,
+                        type: userInfo.class,
+                        role: 6,
+                        active: "Always"
+                    }
+                ]
+
+            });
+            navigate('/turn-select');
+        });
+
         socket.emit('getUserList');
         socket.emit('getChallengersList', userInfo.username);
 
@@ -49,8 +84,9 @@ export default function Home() {
         return () => {
             socket.off('onlineUserListUpdate');
             socket.off('challengersUpdate');
+            socket.off('matchRoom');
         }
-    }, [])
+    }, [challenge])
 
     const adminPage = () => {
         if (admin) {

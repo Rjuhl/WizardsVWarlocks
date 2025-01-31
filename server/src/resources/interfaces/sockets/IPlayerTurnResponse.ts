@@ -6,5 +6,6 @@ export interface IPlayerTurnResponse {
     damageDelivered: number,
     damageTaken: number,
     manaSpent: number,
-    winner: string | null
+    winner: string | null,
+    turn: number,
 }

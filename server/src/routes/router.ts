@@ -67,6 +67,23 @@ router.get('/login', async (req, res) => {
     res.end()
 })
 
+router.get('/playerAvatar', async (req, res) => {
+    const username = req.query.username;
+    const filter = {username: username};
+    const userContext = await schemas.Users.where(filter).findOne();
+    if (userContext) {
+        res.send(
+            {
+                player: userContext.username,
+                hatColor: userContext.hatColor,
+                staffColor: userContext.staffColor
+            }
+        )
+        return;
+    }
+    res.status(201).send("player does not exist");
+});
+
 router.post('/submitprofile', async (req, res) => {
     const user = req.body.userInfo
     const totalPoints = 4

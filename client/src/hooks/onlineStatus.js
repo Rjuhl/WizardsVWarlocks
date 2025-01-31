@@ -13,7 +13,7 @@ const useOnlineStatus = () => {
     useEffect(() => {
         if (userInfo !== null && location.pathname !== '/' && !online && !sentUpdate) {
             socket.connect()
-            socket.emit('userOnline', userInfo.username)
+            socket.emit('userOnline', userInfo.username, userInfo.password)
             setOnline(true)
             sentUpdate = true
         }

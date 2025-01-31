@@ -15,6 +15,7 @@ export class GameRoom {
     private gameLedger: Array<IGameState> = [];
     private game: Game | null = null;
     private turn: ITurn = {};
+    private turnCounter: number = 0;
     constructor(
         player1Username: string, 
         player1Password: string,
@@ -87,6 +88,7 @@ export class GameRoom {
         if(!this.game) return null;
         if (this.bothTurnsSubmited()) {
             let winner = null;
+            this.turnCounter += 1;
             const turnResponse = await this.game.completeTurn(this.turn[this.player1], this.turn[this.player2]);
             
             // Determine if there is a winner and pass it along
@@ -108,7 +110,8 @@ export class GameRoom {
                     damageDelivered: turnData.player1.damageDelivered,
                     damageTaken: turnData.player1.damageTaken,
                     manaSpent: turnData.player1.manaSpent,
-                    winner: winner
+                    winner: winner,
+                    turn: this.turnCounter
                 },
                 {
                     player: this.player2,
@@ -116,7 +119,8 @@ export class GameRoom {
                     damageDelivered: turnData.player2.damageDelivered,
                     damageTaken: turnData.player2.damageTaken,
                     manaSpent: turnData.player2.manaSpent,
-                    winner: winner
+                    winner: winner,
+                    turn: this.turnCounter
                 }
             ]
 

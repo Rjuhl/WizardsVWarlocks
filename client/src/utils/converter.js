@@ -1,7 +1,7 @@
 export default class Converter {
     constructor() {}
     spellTypeToString(spellType) {
-        const spellTypes = ["Attack", "Block", "Heal", "Recharge", "Passive"]
+        const spellTypes = ["Attack", "Block", "Heal", "Recharge", "Passive", "None", "All"]
         return spellTypes[spellType]
     }
 

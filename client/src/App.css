@@ -297,6 +297,16 @@ html, body {
   text-align: start;
 }
 
+.spellComponentQuestionMark {
+  text-align: center; /* Centers the text horizontally */
+  color: gray; /* Makes the text gray */
+  font-size: 48px; /* Increases the font size */
+  margin: 0; /* Removes any default margin */
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+
  .spellComponent:hover {
   transform: scale(1.05);
   background-color: #e0e0e0;
@@ -452,6 +462,12 @@ html, body {
 .spellForSaleButton {
   background-color: transparent;
   border: none;
+}
+
+.spellDisplay {
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center; /* Center the content inside the container */
 }
 
 /* First button hover effect */
@@ -715,4 +731,42 @@ html, body {
   background-color: #b0d4ff;
   transform: translateY(0); /* Reset lift effect */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.medium-header {
+  font-size: 24px; /* Medium size, similar to h3 */
+  font-weight: 500; /* Elegant weight */
+  text-align: left; /* Aligns text to the left */
+  color: #444; /* A nice dark gray */
+  margin: 15px 20px; /* Adds spacing: 15px top/bottom, 20px left/right */
+  padding-left: 10px; /* Extra padding so it’s not too close to the edge */
+}
+
+.center-character {
+  padding-left: 60px;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Dark backdrop */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Make sure it's on top */
+}
+
+.popup {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 80%;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
