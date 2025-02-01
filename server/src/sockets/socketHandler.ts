@@ -93,6 +93,12 @@ export default function socketHandler(io: Server): void {
                 timers[roomName] = timer;
                 timer.start();
                 console.log(`Room ${roomName} created between ${challenger} and ${foe}`);
+
+                // Clean up challenges
+                delete challenges[challenger][foe];
+                delete challenges[foe][challenger];
+                delete receivedChallenges[challenger][foe];
+                delete receivedChallenges[foe][challenger];
             } else {
                 // Notify the foe of a challenge
                 if (onlineUsers[foe]) {
@@ -148,6 +154,7 @@ export default function socketHandler(io: Server): void {
                 const turnResponse = await rooms[gameRoom].takeTurn(username, playerTurn);
                 console.log(`${username} made move in room: ${gameRoom}`);
                 if (turnResponse) {
+                    timers[gameRoom].start();
                     for (const playerResponse of turnResponse) {
                         console.log(`Emitting message to ${playerResponse.player} with socketid ${userToSocket[playerResponse.player]}`)
                         io.to(userToSocket[playerResponse.player]).emit('turnResult', playerResponse);

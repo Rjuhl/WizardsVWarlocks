@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import socket from "../../socket.js";
 import CharacterCanvas from "../../components/charcterComponents/character.js";
 import Spell from "../../components/spell.js";
+import useNavigationGuard from "../../hooks/useNavigationGuard.js"
 
 export default function ResolveTurn() {
     const [gameContext, setGameContext] = useContext(GameContext);
@@ -31,9 +32,15 @@ export default function ResolveTurn() {
     const [foeStaffColor, setFoeStaffColor] = useState({h: gameContext.foeAvatar.staffColor[0], s: gameContext.foeAvatar.staffColor[1], v: gameContext.foeAvatar.staffColor[2]})
     
     //Page Navigate
-    const navigate = useNavigate();
+    const navigate = useNavigationGuard();
 
     useEffect(() => {
+        socket.on('winner', winner => {
+            gameContext["winner"] = winner;
+            setGameContext(gameContext);
+            navigate('/game-end');
+        });
+
         socket.on('turnResult', playerTurnResponse => {
             console.log(playerTurnResponse);
             if (playerTurnResponse.winner) {
@@ -53,6 +60,7 @@ export default function ResolveTurn() {
 
         return () => {
             socket.off('turnResult');
+            socket.off('winner');
         };
     }, [displayReady]);
 
@@ -71,13 +79,15 @@ export default function ResolveTurn() {
         gameContext.health = playerState.playerStats.health;
         gameContext.mana = playerState.playerStats.mana;
 
-        gameContext.modifers = playerState.modifiers.map((abilityModifer) => ({
+        const newModifierArray = []
+        playerState.modifiers.map((abilityModifer) => (newModifierArray.push({
             multiplier: abilityModifer.multiplier,
             type: abilityModifer.type,
             role: abilityModifer.role,
-            remove: (abilityModifer.removeAfterUse) ? "Remove after use" : "Permanent"
+            active: (abilityModifer.removeAfterUse) ? "Remove after use" : "Permanent"
             
-        }));
+        })));
+        gameContext.modifiers = newModifierArray;
 
         setGameContext(gameContext)
     }

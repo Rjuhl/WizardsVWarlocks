@@ -5,6 +5,7 @@ import Context from '../components/providers/context.js'
 import Spell from "../components/spell"
 import axios from "axios";
 import GameContext from "../components/providers/gameContext.js";
+import useNavigationGuard from "../hooks/useNavigationGuard.js"
 
 export default function EquipSpells(props) {
     const numSpellSlots = 6
@@ -16,7 +17,7 @@ export default function EquipSpells(props) {
     const [addButtonVisable, setAddButtonVisable] = useState(false)
     const [removeButtonVisable, setRemoveButtonVisable] = useState(false)
     const [returnMessage, setReturnMessage] = useState('')
-    const navigate = useNavigate()
+    const navigate = useNavigationGuard();
     const [inGameSpells, setInGameSpells] = useState(gameContext.activeSpells)
 
     useOnlineStatus()

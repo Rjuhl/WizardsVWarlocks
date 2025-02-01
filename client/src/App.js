@@ -3,7 +3,6 @@ import Router from './components/router'
 import Context from './components/providers/context'
 import Online from './components/providers/online'
 import GameContext  from './components/providers/gameContext';
-import useOnlineStatus from './hooks/onlineStatus'
 import { useState } from 'react'
 
 function App() {

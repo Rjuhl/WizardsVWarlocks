@@ -481,4 +481,29 @@ describe("Game Test", () => {
             expect(turnResponse.gamePhase).toBe(GameEndTypes.TIE);
         });
     });
+
+    describe("Misc Tests", () => {
+
+        it("Water Damage is Negated Before Winner is Decided", async () => {
+            const player1State = buildPlayerState(
+                'player_a', 'password',
+                1, 10, 1.4, 2
+            );
+            const player2State = buildPlayerState(
+                'player_b', 'password',
+                100, 10, 1.2, 1
+            );
+            const game = new Game({
+                player1: player1State,
+                player2: player2State
+            });
+            const aTurn = buildPlayerTurn(Spells.WATER_JET, 1);
+            const bTurn = buildPlayerTurn(Spells.DRACONIC_BREATH, 3);
+            const turnResponse = await game.completeTurn(aTurn, bTurn);
+            runBasicTests(turnResponse, [
+                1, 
+                100 - SPELL_ROLL.WATER_JET, 
+                9, 7], GameEndTypes.ONGOING);
+        });
+    });
 });

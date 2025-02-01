@@ -16,10 +16,12 @@ import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import { Button } from "@mui/material";
 import EquipSpells from "../equip_spells.js";
 import socket from "../../socket.js";
-import { useNavigate } from 'react-router-dom';
+import Modifier from "../../components/modifer.js";
+import useNavigationGuard from "../../hooks/useNavigationGuard.js"
 
 export default function TurnSelect() {
     const SWAP_SPELL_ID = 15;
+    const TURN_TIME = 1000 * 60 * 2;
     const [userInfo, setUserInfo] = useContext(Context);
     const [gameContext, setGameContext] = useContext(GameContext);
     const [round, setRound] = useState(gameContext.round);
@@ -29,6 +31,7 @@ export default function TurnSelect() {
     const [manaSpent, setManaSpent] = useState(0)
     const [slider, setSlider] = useState([1, 0, 10])
     const [reselectSpells, setReselectSpells] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(TURN_TIME / 1000);
 
     // Character consts
     const [hatColor, setHatColor] = useState({h: gameContext.hatColor[0], s: gameContext.hatColor[1], v: gameContext.hatColor[2]})
@@ -36,9 +39,29 @@ export default function TurnSelect() {
     const [foeHatColor, setFoeHatColor] = useState({h: gameContext.foeAvatar.hatColor[0], s: gameContext.foeAvatar.hatColor[1], v: gameContext.foeAvatar.hatColor[2]})
     const [foeStaffColor, setFoeStaffColor] = useState({h: gameContext.foeAvatar.staffColor[0], s: gameContext.foeAvatar.staffColor[1], v: gameContext.foeAvatar.staffColor[2]})
 
-    const navigate = useNavigate();
+    const navigate = useNavigationGuard();
     useEffect(() => {
-    }, [slider, gameContext, reselectSpells]);
+        socket.on('winner', winner => {
+            gameContext["winner"] = winner;
+            setGameContext(gameContext);
+            navigate('/game-end');
+        });
+
+        socket.on('clock', time => {
+            setTimeLeft(time);
+        });
+
+        // Update manaSpent if there is no slider
+        if (slider[1] === slider[2] || slider[0] === 0) {
+            setManaSpent(slider[1])
+        }
+
+        return () => {
+            socket.off('winner');
+            socket.off('clock');
+        };
+
+    }, [timeLeft, slider, gameContext, reselectSpells]);
 
     const handleCastSpell = () => {
         if (spellEquiped === -1) return;
@@ -47,8 +70,6 @@ export default function TurnSelect() {
             gameContext.lastObserved = gameContext.round + 1
             setGameContext(gameContext)
         }
-
-        console.log(gameContext.newSpells)
 
         socket.emit("makeTurn",
             gameContext.username,
@@ -63,13 +84,18 @@ export default function TurnSelect() {
     }
 
     const setSliderDetails = async (id) => {
-        if (spellEquiped !== -1) {
-            const frozenMultiplier = Boolean(gameContext.frozen) ? 2 : 1
+        if (id !== -1) {
             const params = {params: {id: id}};
             const spell = (await axios.get('/spell', params)).data.spell;
-            const spellMaxMana = ((Boolean(spell.flags[1])) ? Math.floor(gameContext.mana / spell.manaCost) * spell.manaCost: spell.manaCost) * frozenMultiplier;
-            const spellMinMana = ((spellMaxMana >= spell.manaCost) ? spell.manaCost : 0) * frozenMultiplier;
-            const step = spell.manaCost * frozenMultiplier;
+            if (spell.manaCost === 0) {
+                setSlider([0, 0, 0]);
+                return;
+            };
+            const frozenMultiplier = Boolean(gameContext.frozen) ? 2 : 1
+            const updatedManaCost = spell.manaCost * frozenMultiplier;
+            const spellMaxMana = ((Boolean(spell.flags[1])) ? Math.floor(gameContext.mana / updatedManaCost) * updatedManaCost: updatedManaCost);
+            const spellMinMana = ((spellMaxMana >= updatedManaCost) ? updatedManaCost : 0);
+            const step = updatedManaCost;
             setSlider([step, spellMinMana, spellMaxMana])
         } 
     }
@@ -85,7 +111,7 @@ export default function TurnSelect() {
                     { gameContext.activeSpells.map((spellId, index) =>
                         <div key={index}>
                             <button className="spellForSaleButton" onClick={() => {
-                                console.log(spellId); setSpellEquiped(spellId); setSliderDetails(spellId); activateSpellSelection(spellId);
+                                setSpellEquiped(spellId); setSliderDetails(spellId); activateSpellSelection(spellId);
                             }}>
                                 <Spell key={spellId} spellId={spellId} />
                             </button>
@@ -96,7 +122,9 @@ export default function TurnSelect() {
         )
     }
 
-    const contructSlider = ()=> {        
+    const contructSlider = ()=> {
+        console.log(slider)   
+        if (slider[1] === slider[2] || slider[0] === 0) return (<></>);
         return <Slider
             aria-label="Temperature"
             getAriaValueText={valuetext}
@@ -189,6 +217,7 @@ export default function TurnSelect() {
                     <h1 className="medium-header">{gameContext.foeMana ? gameContext.mana : '??'}</h1>
                 </Stack>
             </Box>
+            <h1>{timeLeft}</h1>
         </Stack>
         
         <h1 className="medium-header">My Spells</h1>
@@ -205,13 +234,13 @@ export default function TurnSelect() {
         </div>
         <h1 className="medium-header">Active Modifiers</h1>
         <div className="shop-spells-container">
-            {/* <div className="equip-row">
-                { observedSpells.map((spellId, index) =>
+            <div className="equip-row">
+                { gameContext.modifiers.map((modifier, index) =>
                     <div key={index} className="spellDisplay">
-                        {spellId === -1 ? <UnknownSpell key={index}/> : <Spell key={index} spellId={spellId} showCost={false} />}
+                       <Modifier modifier={modifier}/>
                     </div>
                 )}
-            </div> */}
+            </div>
         </div>
         <div>
             {reselectSpells && (
