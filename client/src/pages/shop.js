@@ -4,6 +4,7 @@ import useOnlineStatus from "../hooks/onlineStatus.js"
 import Spell from "../components/spell"
 import Context from '../components/providers/context.js'
 import axios from 'axios'
+import useNavigationGuard from "../hooks/useNavigationGuard.js"
 
 // NEED TO UPDATE TOTAL SPELLS WHEN ADDING MORE SPELLS 
 const TOTAL_SPELLS = 22
@@ -14,7 +15,7 @@ export default function Shop() {
     const [numSpells, setNumSpells] = useState(TOTAL_SPELLS - userInfo.spellsOwned.length)
     const [selectedSpell, setSelectedSpell] = useState(null)
     const [buttonsVisable, setButtonsVisable] = useState(false)
-    const navigate = useNavigate()
+    const navigate = useNavigationGuard();
 
     useOnlineStatus()
 

@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import GameContext from "../../components/providers/gameContext";
 import { useContext } from "react";
+import useNavigationGuard from "../../hooks/useNavigationGuard.js"
 
 export default function GameEnd() {
-    const navigate = useNavigate();
+    const navigate = useNavigationGuard();
     const [gameContext, setGameContext] = useContext(GameContext);
 
     return (

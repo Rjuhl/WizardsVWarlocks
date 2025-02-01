@@ -6,9 +6,11 @@ import axios from 'axios'
 import Converter from "../utils/converter"
 import { useContext, useState, useEffect } from "react"
 import { useNavigate } from 'react-router-dom';
+import useNavigationGuard from "../hooks/useNavigationGuard.js"
+
 
 export default function CharCreation() {
-    const navigate = useNavigate();
+    const navigate = useNavigationGuard();
     const [userInfo, setUserInfo] = useContext(Context)
     const [userClass, setUserClass] = useState(0)
     const [returnMessage, setReturnMessage] = useState('')

@@ -40,6 +40,7 @@ export default function Spell(props) {
                 <div className="spellInfoLeft">
                     <div>Spell Class: {converter.spellClassToString(spellObj.class)}</div>
                     <div>Spell Type: {converter.spellTypeToString(spellObj.type)}</div>
+                    <div>Mana Cost: {spellObj.manaCost}</div>
                 </div>
                 <div className="spellDetailsRight">X = {spellObj.abilityBase} + {spellObj.abilityNumDie}d{spellObj.abilityDie}</div>
             </div>

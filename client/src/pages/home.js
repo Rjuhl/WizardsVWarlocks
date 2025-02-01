@@ -7,6 +7,7 @@ import Converter from "../utils/converter";
 import useOnlineStatus from "../hooks/onlineStatus.js"
 import socket from '../socket'
 import axios from 'axios'
+import useNavigationGuard from "../hooks/useNavigationGuard.js"
 
 // const [hatHsva, setHatHsva] = useState({ h: 0, s: 0, v: 68, a: 1 });
 // const [staffHsva, setStaffHsva] = useState({ h: 0, s: 0, v: 68, a: 1 });
@@ -26,7 +27,7 @@ export default function Home() {
     const classType = userInfo.class
     const userName = userInfo.username
     const admin = userInfo.admin || false
-    const navigate = useNavigate();
+    const navigate = useNavigationGuard();
     const converter = new Converter()
     
     useOnlineStatus();
@@ -58,7 +59,7 @@ export default function Home() {
                 foeAvatar: foeAvatar,
                 observedSpells: Array(userInfo.activeSpells.length).fill(-1),
                 round: 0,
-                lastObserve: 0,
+                lastObserved: 0,
                 newSpells: null,
                 foeHealth: null,
                 foeMana: null,
@@ -67,10 +68,10 @@ export default function Home() {
                 ignited: false,
                 modifiers: [
                     {
-                        modifier: userInfo.classMultiplier,
+                        multiplier: userInfo.classMultiplier,
                         type: userInfo.class,
                         role: 6,
-                        active: "Always"
+                        active: "Permanent"
                     }
                 ]
 
