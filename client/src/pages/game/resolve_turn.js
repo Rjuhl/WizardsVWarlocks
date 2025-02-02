@@ -15,6 +15,7 @@ import socket from "../../socket.js";
 import CharacterCanvas from "../../components/charcterComponents/character.js";
 import Spell from "../../components/spell.js";
 import useNavigationGuard from "../../hooks/useNavigationGuard.js"
+import GameEnd from "./game_end.js";
 
 export default function ResolveTurn() {
     const [gameContext, setGameContext] = useContext(GameContext);
@@ -38,17 +39,9 @@ export default function ResolveTurn() {
         socket.on('winner', winner => {
             gameContext["winner"] = winner;
             setGameContext(gameContext);
-            navigate('/game-end');
         });
 
         socket.on('turnResult', playerTurnResponse => {
-            console.log(playerTurnResponse);
-            if (playerTurnResponse.winner) {
-                gameContext["winner"] = playerTurnResponse.winner;
-                setGameContext(gameContext);
-                navigate('/game-end');
-            };
-
             updateGameContext(playerTurnResponse);
             setDamageDelivered(playerTurnResponse.damageDelivered);
             setDamageTaken(playerTurnResponse.damageTaken);
@@ -56,6 +49,10 @@ export default function ResolveTurn() {
             setSpellCast(playerTurnResponse.playerMoves[gameContext.username]);
             setFoeSpellCast(playerTurnResponse.playerMoves[gameContext.foeAvatar.player]);
             setDisplayReady(true);
+            if (playerTurnResponse.winner) {
+                gameContext["winner"] = playerTurnResponse.winner;
+                setGameContext(gameContext);
+            };
         })
 
         return () => {
@@ -122,6 +119,7 @@ export default function ResolveTurn() {
         }
 
         return (
+            <>
             <Stack
                 direction="column"
                 justifyContent="center"
@@ -164,7 +162,9 @@ export default function ResolveTurn() {
                 >
                     Return to spell selection
                 </Button>
-            </Stack>    
+            </Stack>
+            {gameContext.winner && <GameEnd/>}
+            </>    
         )
     }
 
