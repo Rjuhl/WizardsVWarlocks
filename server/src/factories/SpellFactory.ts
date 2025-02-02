@@ -67,29 +67,29 @@ export class SpellFactory {
         if (this.getRole(spellData.type) === SpellRoles.ATTACK) {
             spell.setDamage(
                 spellData.abilityBase,
+                spellData.abilityDie,
                 spellData.abilityNumDie,
-                spellData.abilityDie
             )
         }
         if (this.getRole(spellData.type) === SpellRoles.DEFENSE) {
             spell.setDefense(
                 spellData.abilityBase,
+                spellData.abilityDie,
                 spellData.abilityNumDie,
-                spellData.abilityDie
             )
         }
         if (this.getRole(spellData.type) === SpellRoles.HEALING) {
             spell.setHealing(
                 spellData.abilityBase,
+                spellData.abilityDie,
                 spellData.abilityNumDie,
-                spellData.abilityDie
             )
         }
         if (this.getRole(spellData.type) === SpellRoles.RECHARGE) {
             spell.setManaRecharge(
                 spellData.abilityBase,
+                spellData.abilityDie,
                 spellData.abilityNumDie,
-                spellData.abilityDie
             )
         }
 

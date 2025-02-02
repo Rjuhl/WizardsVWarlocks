@@ -15,12 +15,17 @@ export const InitSpellRolls = async () => {
         if (!spellData) {
             throw new Error(`Spell with ID ${i} not found`);
         };
-        SPELL_ROLL[keys[loops + i]] = spellData.abilityBase + spellData.abilityDie + spellData.abilityNumDie;
+
+        const func = (charge=1) => {
+            return (spellData.abilityBase * charge) + spellData.abilityDie + (spellData.abilityNumDie * charge);
+        }
+        SPELL_ROLL[keys[loops + i]] = func;
     };
 
     // Additional roll values to add [NEED CHANGED MANUALLY IF UPDATED]
     SPELL_ROLL["IGNITED"] = 7;
     SPELL_ROLL["SELF_INFLICTED_DAMAGE"] = 7;
-    SPELL_ROLL["BLOCK_MODIFER_AMOUNT"] = 4;
+    SPELL_ROLL["BLOCK_MODIFER_AMOUNT"] = (charge: number = 1) => charge * 4;
     return SPELL_ROLL;
 };
+

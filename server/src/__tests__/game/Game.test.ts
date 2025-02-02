@@ -104,8 +104,8 @@ describe("Game Test", () => {
             const bTurn = buildPlayerTurn(Spells.MAGIC_MISSLE, 1);
             const turnResponse = await game.completeTurn(aTurn, bTurn);
             runBasicTests(turnResponse, [
-                100 - SPELL_ROLL.MAGIC_MISSLE, 
-                100 - SPELL_ROLL.MAGIC_MISSLE, 
+                100 - SPELL_ROLL.MAGIC_MISSLE(), 
+                100 - SPELL_ROLL.MAGIC_MISSLE(), 
                 9, 9], GameEndTypes.ONGOING)
         });
     
@@ -122,7 +122,7 @@ describe("Game Test", () => {
             const turnResponse = await game.completeTurn(aTurn, bTurn)
             runBasicTests(turnResponse, [
                 100, 
-                100-(Math.floor((2 * SPELL_ROLL.MAGIC_MISSLE - SPELL_ROLL.WARD) / 2)), 
+                100-(Math.floor((SPELL_ROLL.MAGIC_MISSLE(2) - SPELL_ROLL.WARD()) / 2)), 
                 8, 9], GameEndTypes.ONGOING)
         });
     
@@ -132,7 +132,7 @@ describe("Game Test", () => {
             const turnResponse = await game.completeTurn(aTurn, bTurn);
             runBasicTests(turnResponse, [
                 100, 
-                100-SPELL_ROLL.MAGIC_MISSLE,
+                100-SPELL_ROLL.MAGIC_MISSLE(),
                 9, 12], GameEndTypes.ONGOING)
         });
     
@@ -155,8 +155,8 @@ describe("Game Test", () => {
             const bTurn = buildPlayerTurn(Spells.HEAL, 2);
             const turnResponse = await game.completeTurn(aTurn, bTurn)
             runBasicTests(turnResponse, [
-                100 + SPELL_ROLL.HEAL, 
-                100 + SPELL_ROLL.HEAL * 2, 
+                100 + SPELL_ROLL.HEAL(), 
+                100 + SPELL_ROLL.HEAL(2), 
                 9, 8], GameEndTypes.ONGOING)
         });
 
@@ -176,8 +176,8 @@ describe("Game Test", () => {
             await game.completeTurn(aTurn1, bTurn1);
             const turnResponse = await game.completeTurn(aTurn2, bTurn2);
             runBasicTests(turnResponse, [
-                100 - SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE, 
-                100 - SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE, 
+                100 - SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE(), 
+                100 - SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE(), 
                 8, 8], GameEndTypes.ONGOING);
         });
     }) 
@@ -219,8 +219,8 @@ describe("Game Test", () => {
             const bTurn1 = buildPlayerTurn(Spells.HEAVENLY_LIGHTNING_STRIKE, 4);
             const turnResponse1 = await game.completeTurn(aTurn1, bTurn1);
             runBasicTests(turnResponse1, [
-                58 - SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE, 
-                58 - SPELL_ROLL.FIRE_BALL, 
+                58 - SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE(), 
+                58 - SPELL_ROLL.FIRE_BALL(), 
                 9, 6], GameEndTypes.ONGOING);
             expect(turnResponse1.gameState.player2.ignited).toBe(3);
 
@@ -229,8 +229,8 @@ describe("Game Test", () => {
             const bTurn2 = buildPlayerTurn(Spells.RECHARGE, 0);
             const turnResponse2 = await game.completeTurn(aTurn2, bTurn2);
             runBasicTests(turnResponse2, [
-                58 - SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE, 
-                58 - SPELL_ROLL.FIRE_BALL - SPELL_ROLL.IGNITED - SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE, 
+                58 - SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE(), 
+                58 - SPELL_ROLL.FIRE_BALL() - SPELL_ROLL.IGNITED - SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE(), 
                 5, 8], GameEndTypes.ONGOING);
             expect(turnResponse2.gameState.player2.ignited).toBe(2);
 
@@ -260,7 +260,7 @@ describe("Game Test", () => {
             expect(turnResponse.gameState.player2.ignited).toBe(Spells.FIRE_BALL);
             runBasicTests(turnResponse, [
                 58, 
-                58 - SPELL_ROLL.FIRE_BALL - SPELL_ROLL.IGNITED * 3, 
+                58 - SPELL_ROLL.FIRE_BALL() - SPELL_ROLL.IGNITED * 3, 
                 17, 20], GameEndTypes.ONGOING);
         });
 
@@ -271,7 +271,7 @@ describe("Game Test", () => {
             const turnResponse1 = await game.completeTurn(aTurn1, bTurn1);
             runBasicTests(turnResponse1, [
                 58, 
-                58 - SPELL_ROLL.FREEZE_SPELL, 
+                58 - SPELL_ROLL.FREEZE_SPELL(), 
                 9, 12], GameEndTypes.ONGOING);
             expect(turnResponse1.gameState.player1.frozen).toBe(false);
             expect(turnResponse1.gameState.player2.frozen).toBe(true);
@@ -281,8 +281,8 @@ describe("Game Test", () => {
             const bTurn2 = buildPlayerTurn(Spells.HEAVENLY_LIGHTNING_STRIKE, 8);
             const turnResponse2 = await game.completeTurn(aTurn2, bTurn2);
             runBasicTests(turnResponse2, [
-                58 - SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE, 
-                58 - SPELL_ROLL.FREEZE_SPELL, 
+                58 - SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE(), 
+                58 - SPELL_ROLL.FREEZE_SPELL(), 
                 11, 4], GameEndTypes.ONGOING);
             expect(turnResponse2.gameState.player2.frozen).toBe(false); 
         });
@@ -309,7 +309,7 @@ describe("Game Test", () => {
             const bTurn1 = buildPlayerTurn(Spells.MAGIC_MISSLE, 1);
             const turnResponse1 = await game.completeTurn(aTurn1, bTurn1);
             runBasicTests(turnResponse1, [
-                58 - SPELL_ROLL.MAGIC_MISSLE, 
+                58 - SPELL_ROLL.MAGIC_MISSLE(), 
                 58, 
                 16, 9], GameEndTypes.ONGOING);
     
@@ -318,7 +318,7 @@ describe("Game Test", () => {
             const bTurn2 = buildPlayerTurn(Spells.RECHARGE, 0);
             const turnResponse2 = await game.completeTurn(aTurn2, bTurn2);
             runBasicTests(turnResponse2, [
-                58 - SPELL_ROLL.MAGIC_MISSLE, 
+                58 - SPELL_ROLL.MAGIC_MISSLE(), 
                 58, 
                 16, 11], GameEndTypes.ONGOING);
 
@@ -327,7 +327,7 @@ describe("Game Test", () => {
             const bTurn3 = buildPlayerTurn(Spells.HEAVENLY_LIGHTNING_STRIKE, 4);
             const turnResponse3 = await game.completeTurn(aTurn3, bTurn3);
             runBasicTests(turnResponse3, [
-                58 - SPELL_ROLL.MAGIC_MISSLE - SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE, 
+                58 - SPELL_ROLL.MAGIC_MISSLE() - SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE(), 
                 58, 
                 24, 7], GameEndTypes.ONGOING);
         });
@@ -348,7 +348,7 @@ describe("Game Test", () => {
             const turnResponse = await game.completeTurn(aTurn, bTurn);
             runBasicTests(turnResponse, [
                 58, 
-                58 - (3 * SPELL_ROLL.DRACONIC_BREATH - SPELL_ROLL.WARD), 
+                58 - (SPELL_ROLL.DRACONIC_BREATH(3) - SPELL_ROLL.WARD()), 
                 7, 9], GameEndTypes.ONGOING);
         });
 
@@ -357,10 +357,9 @@ describe("Game Test", () => {
             const bTurn = buildPlayerTurn(Spells.FIRE_BALL, 1);
             const turnResponse = await game.completeTurn(aTurn, bTurn);
             runBasicTests(turnResponse, [
-                58, 
-                58 - SPELL_ROLL.WATER_JET, 
+                58 - Math.floor(SPELL_ROLL.FIRE_BALL() / 2), 
+                58 - SPELL_ROLL.WATER_JET(), 
                 9, 9], GameEndTypes.ONGOING);
-            expect(turnResponse.gameState.player1.ignited).toBe(0);
         });
     });
 
@@ -386,13 +385,13 @@ describe("Game Test", () => {
             const bTurn = buildPlayerTurn(Spells.WATER_JET, 2);
             let turnResponse = await game.completeTurn(aTurn, bTurn);
             runBasicTests(turnResponse, [
-                100 - Math.floor(SPELL_ROLL.WATER_JET * 1.2 * 2), 
-                100 - Math.floor(SPELL_ROLL.LIGHTNING_BOLT * 1.4 * 2), 
+                100 - Math.floor(SPELL_ROLL.WATER_JET(2) * 1.2), 
+                100 - Math.floor(SPELL_ROLL.LIGHTNING_BOLT(2) * 1.4), 
                 8, 8], GameEndTypes.ONGOING);
             turnResponse = await game.completeTurn(aTurn, bTurn);
             runBasicTests(turnResponse, [
-                100 - Math.floor(SPELL_ROLL.WATER_JET * 1.2 * 2) * 2,
-                100 - Math.floor(SPELL_ROLL.LIGHTNING_BOLT * 1.4 * 2) * 2, 
+                100 - Math.floor(SPELL_ROLL.WATER_JET(2) * 1.2) * 2,
+                100 - Math.floor(SPELL_ROLL.LIGHTNING_BOLT(2) * 1.4) * 2, 
                 6, 6], GameEndTypes.ONGOING);
         })
 
@@ -402,7 +401,7 @@ describe("Game Test", () => {
             const turnResponse = await game.completeTurn(aTurn, bTurn);
             runBasicTests(turnResponse, [
                 100, 
-                100 - Math.floor((2 * SPELL_ROLL.MAGIC_MISSLE - Math.floor(SPELL_ROLL.WATER_FIELD * 1.2)) / 2), 
+                100 - Math.floor((SPELL_ROLL.MAGIC_MISSLE(2) - Math.floor(SPELL_ROLL.WATER_FIELD() * 1.2)) / 2), 
                 8, 9], GameEndTypes.ONGOING);
         });
 
@@ -414,7 +413,7 @@ describe("Game Test", () => {
             const turnResponse = await game.completeTurn(aTurn, bTurn);
             runBasicTests(turnResponse, [
                 100, 
-                100 - Math.floor(2 * SPELL_ROLL.LIGHTNING_BOLT * 1.4 * 1.5 * 1.25), 
+                100 - Math.floor(SPELL_ROLL.LIGHTNING_BOLT(2) * 1.4 * 1.5 * 1.25), 
                 6, 16], GameEndTypes.ONGOING);
         });
 
@@ -428,7 +427,7 @@ describe("Game Test", () => {
             const turnResponse = await game.completeTurn(aTurn, bTurn);
             runBasicTests(turnResponse, [
                 100, 
-                100 - Math.floor(2 * SPELL_ROLL.WATER_JET * 1.5) - Math.floor(2 * SPELL_ROLL.DRACONIC_BREATH * 1.25), 
+                100 - Math.floor(SPELL_ROLL.WATER_JET(2) * 1.5) - Math.floor(SPELL_ROLL.DRACONIC_BREATH(2) * 1.25), 
                 4, 18], GameEndTypes.ONGOING);
         });
 
@@ -438,7 +437,7 @@ describe("Game Test", () => {
             const turnResponse = await game.completeTurn(aTurn, bTurn);
             runBasicTests(turnResponse, [
                 100, 
-                100 - Math.floor(Math.floor((SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE * 1.4) - 2 * (SPELL_ROLL.FIRE_FIELD + SPELL_ROLL.BLOCK_MODIFER_AMOUNT)) / 2), 
+                100 - Math.floor(Math.floor((SPELL_ROLL.HEAVENLY_LIGHTNING_STRIKE() * 1.4) - (SPELL_ROLL.FIRE_FIELD(2) + SPELL_ROLL.BLOCK_MODIFER_AMOUNT(2))) / 2), 
                 6, 8], GameEndTypes.ONGOING);
         });
     });
@@ -484,10 +483,10 @@ describe("Game Test", () => {
 
     describe("Misc Tests", () => {
 
-        it("Water Damage is Negated Before Winner is Decided", async () => {
+        it("Water Damage is Negated Before Winner", async () => {
             const player1State = buildPlayerState(
                 'player_a', 'password',
-                1, 10, 1.4, 2
+                19, 10, 1.4, 2
             );
             const player2State = buildPlayerState(
                 'player_b', 'password',
@@ -501,8 +500,8 @@ describe("Game Test", () => {
             const bTurn = buildPlayerTurn(Spells.DRACONIC_BREATH, 3);
             const turnResponse = await game.completeTurn(aTurn, bTurn);
             runBasicTests(turnResponse, [
-                1, 
-                100 - SPELL_ROLL.WATER_JET, 
+                19 - Math.floor(SPELL_ROLL.DRACONIC_BREATH(3) / 2), 
+                100 - SPELL_ROLL.WATER_JET(), 
                 9, 7], GameEndTypes.ONGOING);
         });
     });

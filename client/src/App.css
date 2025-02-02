@@ -832,3 +832,42 @@ html, body {
   overflow-y: auto;
   padding: 1px;
 } */
+
+/* Fullscreen overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);  /* Semi-transparent dark overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;  /* Ensures it's on top */
+  pointer-events: auto; /* Ensures clicks go to GameEnd */
+}
+
+/* Transparent overlay content */
+.overlay-content {
+  background: none; /* Removes white background */
+  padding: 20px;
+  text-align: center;
+  color: white; /* Ensures text is readable */
+}
+
+/* Make buttons more visible */
+.shop-home-button {
+  background: rgba(255, 255, 255, 0.3); /* Light transparent background */
+  border: 1px solid white;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.shop-home-button:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
