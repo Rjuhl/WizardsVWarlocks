@@ -96,7 +96,8 @@ export default function TurnSelect() {
             const spellMaxMana = ((Boolean(spell.flags[1])) ? Math.floor(gameContext.mana / updatedManaCost) * updatedManaCost: updatedManaCost);
             const spellMinMana = ((spellMaxMana >= updatedManaCost) ? updatedManaCost : 0);
             const step = updatedManaCost;
-            setSlider([step, spellMinMana, spellMaxMana])
+            setManaSpent(spellMinMana);
+            setSlider([step, spellMinMana, spellMaxMana]);
         } 
     }
 
