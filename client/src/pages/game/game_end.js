@@ -11,7 +11,7 @@ export default function GameEnd() {
             <div className="overlay-content">
                 <h1 className="celebration-header">{`${gameContext.winner} wins! 🎉`}</h1>
                 <button 
-                    className="shop-home-button" 
+                    className="endgame-button" 
                     onClick={() => { setGameContext(undefined); navigate("/home"); }}
                 >
                     Home

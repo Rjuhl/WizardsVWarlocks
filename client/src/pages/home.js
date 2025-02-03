@@ -8,6 +8,7 @@ import useOnlineStatus from "../hooks/onlineStatus.js"
 import socket from '../socket'
 import axios from 'axios'
 import useNavigationGuard from "../hooks/useNavigationGuard.js"
+import { Button, Stack } from "@mui/material";
 
 // const [hatHsva, setHatHsva] = useState({ h: 0, s: 0, v: 68, a: 1 });
 // const [staffHsva, setStaffHsva] = useState({ h: 0, s: 0, v: 68, a: 1 });
@@ -55,6 +56,7 @@ export default function Home() {
 
             setGameContext({
                 ...userInfo,
+                activeSpells: userInfo.activeSpells,
                 matchRoomNumber: roomNumber,
                 foeAvatar: foeAvatar,
                 observedSpells: Array(userInfo.activeSpells.length).fill(-1),
@@ -114,65 +116,66 @@ export default function Home() {
         <>
             {adminPage()}
             <div className="homePage">
-                <div className="homePageLeft">
-                    <div className="content">
-                        <p className="homePageUsername">{userName}</p>
-                        <CharacterCanvas staffHsva={staffColor} setStaffHsva={setStaffColor} hatHsva={hatColor} setHatHsva={setHatColor} scale={0.75} />
-                        <h1>Class Type: {converter.spellClassToString(classType)} </h1>
-                        <div className="homePageRow">
-                            <h2>Health: {health}</h2>
-                            <h2>Gold: {money}</h2>
-                        </div>
-                        <div className="homePageRow">
-                            <h2>Class Multiplier: {classMultiplier}</h2>
-                            <h2>Mana: {mana}</h2>
-                        </div>
-                    </div>
-                    <div className="challenge-section">
-                        <button onClick={() => {navigate('/shop')}}>Shop</button>
-                        <button onClick={() => {navigate('/equipspells')}}>Equip Spells</button>
-                        <h1>Current Challenge:</h1>
-                        <h2>{challenge}</h2>
-                        <button onClick={() => updateChallenge('None')}>Clear Challenge</button>
-                    </div>
+            {/* Left Panel - Character & Stats */}
+            <div className="leftPanel">
+                <div className="characterSection">
+                    <p className="userName">{userName}</p>
+                    <CharacterCanvas 
+                        staffHsva={staffColor} 
+                        setStaffHsva={setStaffColor} 
+                        hatHsva={hatColor} 
+                        setHatHsva={setHatColor} 
+                        scale={0.75} 
+                    />
+                    <h2 className="classType">Class: {converter.spellClassToString(classType)}</h2>
                 </div>
 
-                {/* New User List Section */}
-                <div className="userListSection">
-                    <h2>Online Users</h2>
-                    {challengeMessage !== null && (
-                        <p style={{ color: 'green' }}>
-                        {challengeMessage} challenged!
-                        </p>
-                    )}
+                <div className="statsGrid">
+                    <div className="stat"><h3>Health</h3><p>{health}</p></div>
+                    <div className="stat"><h3>Gold</h3><p>{money}</p></div>
+                    <div className="stat"><h3>Mana</h3><p>{mana}</p></div>
+                    <div className="stat"><h3>Class Multiplier</h3><p>{classMultiplier}</p></div>
+                </div>
+            </div>
+
+            {/* Middle Panel - Challenge Section */}
+            <div className="middlePanel">
+                <h2 className="sectionTitle">🏆 Challenge</h2>
+                <p className="challengeText">{challenge || "No active challenge"}</p>
+                {/* Buttons */}
+                <Stack spacing={2}>
+                    <Button variant="outlined" onClick={() => navigate('/shop')}>Visit Shop</Button>
+                    <Button variant="outlined" onClick={() => navigate('/equipspells')}>Equip Spells</Button>
+                    <Button variant="contained" className="button" onClick={() => updateChallenge('None')}>Clear Challenge</Button>
+                </Stack>
+            </div>
+
+            {/* Right Panel - Online Users & Challengers */}
+            <div className="rightPanel">
+                <div className="userListContainer">
+                    <h2 className="sectionTitle">🌐 Online Users</h2>
+                    {challengeMessage && <p className="successMessage">{challengeMessage} challenged!</p>}
                     <div className="userList">
-                        {onlineList.filter((user) => user !== userInfo.username).map((user, index) => (
-                            <button
-                                key={user}
-                                className={`userRow ${index % 2 === 0 ? 'evenRow' : 'oddRow'}`}
-                                onClick={() => updateChallenge(user)}
-                            >
+                        {onlineList.filter(user => user !== userInfo.username).map((user, index) => (
+                            <button key={user} className="userButton" onClick={() => updateChallenge(user)}>
                                 {user}
                             </button>
                         ))}
                     </div>
                 </div>
 
-                <div className="userListSection">
-                    <h2>Challengers</h2>
+                <div className="userListContainer">
+                    <h2 className="sectionTitle">⚔️ Challengers</h2>
                     <div className="userList">
                         {challengers.map((user, index) => (
-                            <button
-                                key={user}
-                                className={`userRow ${index % 2 === 0 ? 'evenRow' : 'oddRow'}`}
-                                onClick={() => updateChallenge(user)}
-                            >
+                            <button key={user} className="userButton" onClick={() => updateChallenge(user)}>
                                 {user}
                             </button>
                         ))}
                     </div>
                 </div>
             </div>
+        </div>
         </>
     );
 }

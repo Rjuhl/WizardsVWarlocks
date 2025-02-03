@@ -1,3 +1,4 @@
+import { Button, Stack } from "@mui/material"
 import Context from "../providers/context"
 import { useEffect, useContext, useState } from "react"
 
@@ -36,21 +37,27 @@ export default function CharacterStats() {
     
     const statRow = (text, stat, setStat, num, cap, base) => {
         return (
-            <div className="charCreationRowDiv">
-                <h2>{text}: {stat}</h2>
-                <button className="charCreationAddButton" onClick={() => onAdd(stat, setStat, num, cap, base)}>+</button>
-                <button className="charCreationAddButton" onClick={() => onAdd(stat, setStat, -num, cap, base)}>-</button>
-            </div>
+            <>
+            <Stack direction="row"  spacing={1} alignItems="center" >
+                <h2 className="medium-header">{text}: {stat}</h2>
+                    <Button variant="outlined" onClick={() => onAdd(stat, setStat, num, cap, base)}>+</Button>
+                    <Button variant="outlined" onClick={() => onAdd(stat, setStat, -num, cap, base)}>-</Button>
+            </Stack>
+            </>
         )   
     }
     
     return (
-        <div className="charCreationUserBottomDiv">
-            <h1>Stats</h1>
-            <h2>Points: {pointsLeft} </h2>
+        <Stack 
+        spacing={1} 
+        justifyContent="center" 
+        sx={{ padding: 4 }}
+        >
+            <h1 className="medium-header">Stats</h1>
+            <h2 className="medium-header">Points: {pointsLeft} </h2>
             {statRow("Health", health, setHealth, healthNum, healthCap, defaultHealth)}
             {statRow("Mana", mana, setMana, manaNum, manaCap, defaultMana)}
             {statRow("Class Multiplier", classMultiplier, setClassMultiplier, classMultiplierNum, classMultiplierCap, defaultClassMultiplier)}
-        </div>
+        </Stack>
     )
 }

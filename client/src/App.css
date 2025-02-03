@@ -857,7 +857,7 @@ html, body {
 }
 
 /* Make buttons more visible */
-.shop-home-button {
+.endgame-button {
   background: rgba(255, 255, 255, 0.3); /* Light transparent background */
   border: 1px solid white;
   color: white;
@@ -868,6 +868,139 @@ html, body {
   transition: background 0.3s ease;
 }
 
-.shop-home-button:hover {
+.endgame-button:hover {
   background: rgba(255, 255, 255, 0.5);
 }
+
+/* 🔹 Home Page - Uses a 3-Column Layout */
+.homePage {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 🔹 Left Panel (Character & Stats) */
+.leftPanel {
+  flex: 1;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Username & Character */
+.userName {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.classType {
+  font-size: 1.4rem;
+  color: #007bff;
+}
+
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.stat {
+  padding: 15px;
+  background: #f4f4f4;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.stat h3 {
+  font-size: 1rem;
+  color: #444;
+}
+
+.stat p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* 🔹 Middle Panel (Challenge Section) */
+.middlePanel {
+  flex: 1;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Challenge Title */
+.sectionTitle {
+  font-size: 1.6rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* Challenge Text */
+.challengeText {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ff9800;
+  margin-bottom: 10px;
+}
+
+
+
+/* 🔹 Right Panel (Users & Challengers) */
+.rightPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.userListContainer {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* User List Buttons */
+.userList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.userButton {
+  padding: 10px;
+  font-size: 1rem;
+  background: #f4f4f4;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.userButton:hover {
+  background: #d0e8ff;
+}
+
+/* Success Message */
+.successMessage {
+  font-size: 1rem;
+  color: #28a745;
+  font-weight: bold;
+  text-align: center;
+}
+
