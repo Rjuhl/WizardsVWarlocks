@@ -27,7 +27,7 @@ export default function CharacterCustomization() {
             <div className='colorWheelDiv'>
                 <div>
                     <Fragment>
-                        <h2>Hat Color</h2>
+                        <h2 className="medium-header" >Hat Color</h2>
                         <br></br>
                         <Wheel 
                             color={hatHsva} 
@@ -45,7 +45,7 @@ export default function CharacterCustomization() {
                 </div>
                 <br></br>
                 <div>
-                    <h2>Staff Color</h2>
+                    <h2 className="medium-header">Staff Color</h2>
                     <br></br>
                     <Fragment>
                         <Wheel 

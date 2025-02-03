@@ -7,6 +7,7 @@ import Converter from "../utils/converter"
 import { useContext, useState, useEffect } from "react"
 import { useNavigate } from 'react-router-dom';
 import useNavigationGuard from "../hooks/useNavigationGuard.js"
+import { Button, Stack } from "@mui/material"
 
 
 export default function CharCreation() {
@@ -48,17 +49,24 @@ export default function CharCreation() {
         <>
         <div className="charCreationPage">
             <div className="charCreationUserDiv">
-                <div className="charCreationUserTopDiv">
-                    <h1>{userInfo.username}</h1>
-                    <h2>Type: {converter.spellClassToString(userClass)}</h2>
-                    <div className="charCreationRowDiv">
-                        <button onClick={() => setUserClass(0)}>Fire</button>
-                        <button onClick={() => setUserClass(1)}>Water</button>
-                        <button onClick={() => setUserClass(2)}>Electric</button>
-                    </div>
-                    <button onClick={submitProfile}>Finished Customization</button>
+               
+                    <Stack 
+                    spacing={1} 
+                    justifyContent="center" 
+                    sx={{ padding: 4 }}
+                    >
+                    <h1 className="medium-header">{userInfo.username}</h1>
+                    <h2 className="medium-header">Type: {converter.spellClassToString(userClass)}</h2>
+                    <Stack direction="row" spacing={2}>
+                        <Button variant="outlined" onClick={() => setUserClass(0)}>Fire</Button>
+                        <Button variant="outlined" onClick={() => setUserClass(1)}>Water</Button>
+                        <Button variant="outlined" onClick={() => setUserClass(2)}>Electric</Button>
+                    </Stack>
+                    <Button variant="contained" onClick={submitProfile}>Finished Customization</Button>
                     {returnMessage}
-                </div>
+                    </Stack>
+                    
+               
                 <div className="charCreationUserBottomDiv">
                     <CharacterStats />
                 </div>

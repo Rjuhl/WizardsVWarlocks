@@ -5,16 +5,16 @@ import { Game } from '../../game/Game';
 import { IBasicStats } from "../../resources/interfaces/game/IBasicStats";
 import { GameEndTypes } from "../../resources/types/GameEndTypes";
 import mongoose, { ConnectOptions } from 'mongoose';
-import { DB_URI } from "../../constants/TestEnv";
 import {InitSpellRolls, DynamicObject } from "../../constants/TestConstants";
 import { ICompleteTurnResponse } from "../../resources/interfaces/game/ICompleteTurnResponse";
 import { Spells } from "../../constants/Spells";
+import dotenv from 'dotenv';
 
 jest.setTimeout(20000);
 jest.spyOn(Game.prototype, 'makeRoll').mockImplementation(
     (numRolls: number, die: number, base: number) => numRolls + die + base
 );
-
+dotenv.config();
 const TOTAL_SPELLS = Object.keys(Spells).length / 2;
 const buildPlayerTurn = (
     spellId: number,
@@ -63,7 +63,7 @@ describe("Game Test", () => {
     let SPELL_ROLL: DynamicObject;
     beforeAll(async () => {
         mongoose
-        .connect(DB_URI)
+        .connect(process.env.DB_URI as string)
         .then(() => console.log('Connected to Database'))
         .catch((err) => console.log(err));
         SPELL_ROLL = await InitSpellRolls();

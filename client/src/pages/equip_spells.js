@@ -8,17 +8,19 @@ import GameContext from "../components/providers/gameContext.js";
 import useNavigationGuard from "../hooks/useNavigationGuard.js"
 
 export default function EquipSpells(props) {
-    const numSpellSlots = 6
-    const inGame = props.inGame || false
-    const [userInfo, setUserInfo] = useContext(Context)
-    const [gameContext, setGameContext] = useContext(GameContext)
-    const [selectedActiveSpell, setSelectedActiveSpell] = useState(null)
-    const [selectedOwnedSpell, setSelectedOwnedSpell] = useState(null)
-    const [addButtonVisable, setAddButtonVisable] = useState(false)
-    const [removeButtonVisable, setRemoveButtonVisable] = useState(false)
-    const [returnMessage, setReturnMessage] = useState('')
+    const numSpellSlots = 6;
+    const inGame = props.inGame || false;
+    const [userInfo, setUserInfo] = useContext(Context);
+    const [gameContext, setGameContext] = useContext(GameContext);
+    const [selectedActiveSpell, setSelectedActiveSpell] = useState(null);
+    const [selectedOwnedSpell, setSelectedOwnedSpell] = useState(null);
+    const [addButtonVisable, setAddButtonVisable] = useState(false);
+    const [removeButtonVisable, setRemoveButtonVisable] = useState(false);
+    const [returnMessage, setReturnMessage] = useState('');
     const navigate = useNavigationGuard();
-    const [inGameSpells, setInGameSpells] = useState(gameContext.activeSpells)
+
+    const gameSpellList = inGame ? gameContext.activeSpells : [];
+    const [inGameSpells, setInGameSpells] = useState(gameSpellList);
 
     useOnlineStatus()
 
