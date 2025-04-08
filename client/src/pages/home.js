@@ -176,6 +176,18 @@ export default function Home() {
                 </div>
             </div>
         </div>
+        <img 
+        src="/dragon.png" 
+        alt="Wizard" 
+        style={{
+            position: "fixed",
+            bottom: "10%",
+            right: "10%",
+            width: "30%",
+            height: "auto",
+            zIndex: -1
+        }} 
+        />
         </>
     );
 }
